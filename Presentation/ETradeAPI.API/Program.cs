@@ -1,3 +1,4 @@
+
 using ETradeAPI.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
