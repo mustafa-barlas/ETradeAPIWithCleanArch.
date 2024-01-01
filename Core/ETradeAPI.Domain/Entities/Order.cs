@@ -8,7 +8,7 @@ public class Order : BaseEntity
 
     public string Address { get; set; }
 
-    public int CustomerId { get; set; }
+    public Guid CustomerId { get; set; }
 
     public Customer Customer { get; set; }
 

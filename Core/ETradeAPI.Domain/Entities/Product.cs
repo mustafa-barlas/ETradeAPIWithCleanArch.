@@ -8,7 +8,7 @@ public class Product : BaseEntity
 
     public int Stock { get; set; }
 
-    public long Price { get; set; }
+    public decimal Price { get; set; }
 
     public ICollection<Order> Orders { get; set; } = new List<Order>();
 
