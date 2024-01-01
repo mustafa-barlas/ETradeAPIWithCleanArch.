@@ -17,7 +17,7 @@ namespace ETradeAPI.API.Controllers
         }
 
 
-        [HttpGet(Name = "getAll")]
+        [HttpGet]
         public IActionResult GetProducts()
         {
 
@@ -25,8 +25,17 @@ namespace ETradeAPI.API.Controllers
             return Ok(result);
         }
 
-        //[HttpGet(Name = "get")]
-        //public async void Get()
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(string id)
+        {
+          var product = await _productReadRepository.GetByIdAsync(id,false);
+          product.Name = "aslı";
+          await _productWriteRepository.SaveAsync();
+          return Ok(product);
+        }
+
+        //[HttpGet]
+        //public async Task Get()
         //{
         //    await _productWriteRepository.AddRangeAsync(new()
         //    {
