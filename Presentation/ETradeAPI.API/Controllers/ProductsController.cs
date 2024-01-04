@@ -36,9 +36,7 @@ namespace ETradeAPI.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            var product = await _productReadRepository.GetByIdAsync(id, false);
-            product.Name = "aslı";
-            await _productWriteRepository.SaveAsync();
+            var product = await _productReadRepository.GetByIdAsync(id, true);
             return Ok(product);
         }
 
