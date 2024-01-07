@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\ETradeAPI.Infrastructure\ETradeAPI.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Infrastructure\ETradeAPI.Persistence\ETradeAPI.Persistence.csproj" />
   </ItemGroup>
 

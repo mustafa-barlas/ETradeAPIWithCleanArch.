@@ -12,7 +12,7 @@
     "ETradeAPI.API": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": true,
+      "launchBrowser": false, ///////dsdcd
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:7213;http://localhost:5104",
       "environmentVariables": {

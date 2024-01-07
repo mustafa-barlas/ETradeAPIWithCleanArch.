@@ -1,6 +1,8 @@
-﻿using ETradeAPI.Application.Repositories.CustomerRepository;
-using ETradeAPI.Application.Repositories.OrderRepository;
+﻿using System.Net;
 using ETradeAPI.Application.Repositories.ProductRepository;
+using ETradeAPI.Application.RequestParameters;
+using ETradeAPI.Application.ViewModels.Products;
+using ETradeAPI.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ETradeAPI.API.Controllers
@@ -11,63 +13,78 @@ namespace ETradeAPI.API.Controllers
     {
         private readonly IProductReadRepository _productReadRepository;
         private readonly IProductWriteRepository _productWriteRepository;
-        private readonly IOrderWriteRepository _orderWriteRepository;
-        private readonly IOrderReadRepository _orderReadRepository;
-        private readonly ICustomerWriteRepository _customerWriteRepository;
 
-        public ProductsController(IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository, IOrderReadRepository orderReadRepository, IOrderWriteRepository orderWriteRepository, ICustomerWriteRepository customerWriteRepository)
+        public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository)
         {
-            _productReadRepository = productReadRepository;
             _productWriteRepository = productWriteRepository;
-            _orderReadRepository = orderReadRepository;
-            _orderWriteRepository = orderWriteRepository;
-            _customerWriteRepository = customerWriteRepository;
+            _productReadRepository = productReadRepository;
         }
+
 
         [HttpGet]
-        public IActionResult GetProducts()
+        public async Task<IActionResult> GetProducts([FromQuery] Pagination pagination)
         {
+            var totalProductCount = _productReadRepository.GetAll(false).Count();
+            var products = _productReadRepository.GetAll(false)
+                .Skip(pagination.Page.Value * pagination.Size.Value).Take(pagination.Size.Value)
+                .Select(x => new
+                {
+                    x.Id,
+                    x.Name,
+                    x.Price,
+                    x.Stock,
+                    x.CreatedDate,
+                    x.UpdatedDate
+                }).ToList();
 
-            var result = _productReadRepository.GetAll();
-            return Ok(result);
+            return Ok(new
+            {
+                products,
+                totalProductCount
+            });
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Add(VM_Create_Product model)
+        {
+            await _productWriteRepository.AddAsync(new()
+            {
+                Name = model.Name,
+                Price = model.Price,
+                Stock = model.Stock,
+            });
+
+            await _productWriteRepository.SaveAsync();
+            return StatusCode((int)HttpStatusCode.Created);
+        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            var product = await _productReadRepository.GetByIdAsync(id, true);
-            return Ok(product);
+            return Ok(await _productReadRepository.GetByIdAsync(id, false));
         }
 
-        //[HttpGet(Name = "get")]
-        //public async Task Get()
-        //{
-        //    await _productWriteRepository.AddRangeAsync(new()
-        //        {
-        //            new()
-        //            {
-        //                Id = Guid.NewGuid(),
-        //                Name = "Iphone 11 pro max",
-        //                Price = 100,
-        //                Stock = 10,
-        //            },
-        //            new()
-        //            {
-        //                Id = Guid.NewGuid(),
-        //                Name = "Iphone 12",
-        //                Price = 200,
-        //                Stock = 20,
-        //            },
-        //            new()
-        //            {
-        //                Id = Guid.NewGuid(),
-        //                Name = "Iphone 13 pro",
-        //                Price = 300,
-        //                Stock = 30,
-        //            },
-        //        });
-        //    await _productWriteRepository.SaveAsync();
-        //}
+        [HttpPut]
+        public async Task<IActionResult> Put(VM_Update_Product model)
+        {
+            Product product = await _productReadRepository.GetByIdAsync(model.Id);
+
+            product.Stock = model.Stock;
+            product.Price = model.Price;
+            product.Name = model.Name;
+
+            await _productWriteRepository.SaveAsync();
+
+            return Ok();
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(string id)
+        {
+            await _productWriteRepository.RemoveByIdAsync(id);
+            await _productWriteRepository.SaveAsync();
+            return Ok();
+        }
+
     }
 }
