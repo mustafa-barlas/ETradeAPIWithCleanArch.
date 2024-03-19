@@ -14,7 +14,7 @@ public static class ServiceRegistration
 {
     public static void AddPersistenceServices(this IServiceCollection services)
     {
-        services.AddDbContext<ETradeAPIDbContext>(options => options.UseNpgsql(Configuration.ConnectionString));
+        services.AddDbContext<ETradeAPIDbContext>(options => options.UseSqlServer(Configuration.ConnectionString));
 
         services.AddScoped<ICustomerReadRepository, CustomerReadRepository>();
         services.AddScoped<ICustomerWriteRepository, CustomerWriteRepository>();

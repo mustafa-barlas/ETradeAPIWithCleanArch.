@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using ETradeAPI.Application.Repositories.ProductRepository;
 using ETradeAPI.Application.RequestParameters;
+using ETradeAPI.Application.Services;
 using ETradeAPI.Application.ViewModels.Products;
 using ETradeAPI.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -13,11 +14,15 @@ namespace ETradeAPI.API.Controllers
     {
         private readonly IProductReadRepository _productReadRepository;
         private readonly IProductWriteRepository _productWriteRepository;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IFileService _fileService;
 
-        public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository)
+        public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService)
         {
             _productWriteRepository = productWriteRepository;
             _productReadRepository = productReadRepository;
+            _webHostEnvironment = webHostEnvironment;
+            _fileService = fileService;
         }
 
 
@@ -83,6 +88,14 @@ namespace ETradeAPI.API.Controllers
         {
             await _productWriteRepository.RemoveByIdAsync(id);
             await _productWriteRepository.SaveAsync();
+            return Ok();
+        }
+
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Upload()
+        {
+            await _fileService.UploadAsync("resource/product-images", Request.Form.Files);
             return Ok();
         }
 
