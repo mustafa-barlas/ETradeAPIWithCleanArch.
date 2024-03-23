@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace ETradeAPI.Infrastructure.Services.Storage.Local;
 
-public class LocalStorage : ILocalStorage
+public class LocalStorage :Storage, ILocalStorage
 {
 
     private readonly IWebHostEnvironment _webHostEnvironment;
@@ -27,8 +27,10 @@ public class LocalStorage : ILocalStorage
 
         foreach (IFormFile file in files)
         {
-            await CopyFileAsync($"{uploadPath}\\{file.FileName}", file);
-            datas.Add((file.FileName, $"{path}\\{file.Name}"));
+            string fileNewName = await FileRenameAsync(uploadPath, file.Name, HasFile);
+
+            await CopyFileAsync($"{uploadPath}\\{fileNewName}", file);
+            datas.Add((fileNewName, $"{path}\\{fileNewName}"));
 
         }
 

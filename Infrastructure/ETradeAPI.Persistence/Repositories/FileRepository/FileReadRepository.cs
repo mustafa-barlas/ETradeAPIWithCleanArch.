@@ -6,7 +6,7 @@ namespace ETradeAPI.Persistence.Repositories.FileRepository;
 
 public class FileReadRepository : ReadRepository<File>, IFileReadRepository
 {
-    public FileReadRepository(ETradeAPIDbContext context) : base(context)
+    public FileReadRepository(ETradeApiDbContext context) : base(context)
     {
     }
 }

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace ETradeAPI.Infrastructure.Services;
 
-public class FileService : IFileService
+public class FileService : IFileService  ////  DEPRECATED
 {
     private readonly IWebHostEnvironment _webHostEnvironment;
 

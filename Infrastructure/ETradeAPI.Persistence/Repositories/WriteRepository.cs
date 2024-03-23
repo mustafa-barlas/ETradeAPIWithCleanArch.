@@ -9,9 +9,9 @@ namespace ETradeAPI.Persistence.Repositories;
 public class WriteRepository<T> : IWriteRepository<T> where T : BaseEntity
 {
 
-    private readonly ETradeAPIDbContext _context;
+    private readonly ETradeApiDbContext _context;
 
-    public WriteRepository(ETradeAPIDbContext context)
+    public WriteRepository(ETradeApiDbContext context)
     {
         _context = context;
     }

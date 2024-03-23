@@ -8,9 +8,9 @@ namespace ETradeAPI.Persistence.Repositories;
 
 public class ReadRepository<T> : IReadRepository<T> where T : BaseEntity
 {
-    private readonly ETradeAPIDbContext _context;
+    private readonly ETradeApiDbContext _context;
 
-    public ReadRepository(ETradeAPIDbContext context)
+    public ReadRepository(ETradeApiDbContext context)
     {
         _context = context;
 

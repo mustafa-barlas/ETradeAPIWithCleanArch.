@@ -2,7 +2,7 @@
 
 namespace ETradeAPI.Application.Services;
 
-public interface IFileService
+public interface IFileService         ////  DEPRECATED
 {
     Task<List<(string fileName, string path)>> UploadAsync(string path, IFormFileCollection files);
 

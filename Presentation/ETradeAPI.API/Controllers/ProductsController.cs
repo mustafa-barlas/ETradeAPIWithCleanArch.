@@ -1,4 +1,4 @@
-﻿using System.Net;
+﻿using ETradeAPI.Application.Abstractions.Storage;
 using ETradeAPI.Application.Repositories.FileRepository;
 using ETradeAPI.Application.Repositories.InvoiceFileRepository;
 using ETradeAPI.Application.Repositories.ProductImageFileRepository;
@@ -8,6 +8,7 @@ using ETradeAPI.Application.Services;
 using ETradeAPI.Application.ViewModels.Products;
 using ETradeAPI.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace ETradeAPI.API.Controllers
 {
@@ -25,8 +26,9 @@ namespace ETradeAPI.API.Controllers
         private readonly IProductImageFileWriteRepository _productImageFileWriteRepository;
         private readonly IInvoiceFileReadRepository _invoiceFileReadRepository;
         private readonly IInvoiceFileWriteRepository _invoiceFileWriteRepository;
+        private readonly IStorageService _storageService;
 
-        public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService, IFileWriteRepository fileWriteRepository, IFileReadRepository fileReadRepository, IProductImageFileReadRepository productImageFileReadRepository, IProductImageFileWriteRepository productImageFileWriteRepository, IInvoiceFileReadRepository invoiceFileReadRepository, IInvoiceFileWriteRepository invoiceFileWriteRepository)
+        public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService, IFileWriteRepository fileWriteRepository, IFileReadRepository fileReadRepository, IProductImageFileReadRepository productImageFileReadRepository, IProductImageFileWriteRepository productImageFileWriteRepository, IInvoiceFileReadRepository invoiceFileReadRepository, IInvoiceFileWriteRepository invoiceFileWriteRepository, IStorageService storageService)
         {
             _productWriteRepository = productWriteRepository;
             _productReadRepository = productReadRepository;
@@ -38,6 +40,7 @@ namespace ETradeAPI.API.Controllers
             _productImageFileWriteRepository = productImageFileWriteRepository;
             _invoiceFileReadRepository = invoiceFileReadRepository;
             _invoiceFileWriteRepository = invoiceFileWriteRepository;
+            _storageService = storageService;
         }
 
 
@@ -108,40 +111,37 @@ namespace ETradeAPI.API.Controllers
 
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Upload()
+        public async Task<IActionResult> Upload(string id)
         {
-            var dats = await _fileService.UploadAsync("resource/product-images", Request.Form.Files);
-            //_productImageFileWriteRepository.AddRangeAsync(datas.Select(d => new ProductImageFile()
-            //{
-            //    FileName = d.fileName,
-            //    Path = d.path
-            //}).ToList());
+            List<(string fileName, string pathOrContainer)> result = await _storageService.UploadAsync("resource/product-image-file", Request.Form.Files);
 
+            Product product = await _productReadRepository.GetByIdAsync(id);
+            
+
+            await _productImageFileWriteRepository.AddRangeAsync(result.Select(x => new ProductImageFile()
+            {
+                FileName = x.fileName,
+                Path = x.pathOrContainer,
+                Storage = _storageService.StorageName,
+                Products = new List<Product>() { product }
+            }).ToList());
             await _productImageFileWriteRepository.SaveAsync();
-
-
-            //var datas = await _fileService.UploadAsync("resource/product-images", Request.Form.Files);
-            //_invoiceFileWriteRepository.AddRangeAsync(datas.Select(d => new InvoiceFile()
-            //{
-            //    FileName = d.fileName,
-            //    Path = d.path,
-            //    Price = new Random().Next()
-            //}).ToList());
-
-            //var datas = await _fileService.UploadAsync("resource/product-images", Request.Form.Files);
-            //_fileWriteRepository.AddRangeAsync(datas.Select(d => new ETradeAPI.Domain.Entities.File()
-            //{
-            //    FileName = d.fileName,
-            //    Path = d.path,
-            //}).ToList());
-
-            //await _fileWriteRepository.SaveAsync();
-
-            //var datas = _fileReadRepository.GetAll();
-            //var datas1 = _productImageFileReadRepository.GetAll();
-            //var datas2 = _invoiceFileReadRepository.GetAll();
             return Ok();
         }
 
     }
 }
+
+
+//var datas = await _fileService.UploadAsync("resource/product-images", Request.Form.Files);
+//_fileWriteRepository.AddRangeAsync(datas.Select(d => new ETradeAPI.Domain.Entities.File()
+//{
+//    FileName = d.fileName,
+//    Path = d.path,
+//}).ToList());
+
+//await _fileWriteRepository.SaveAsync();
+
+//var datas = _fileReadRepository.GetAll();
+//var datas1 = _productImageFileReadRepository.GetAll();
+//var datas2 = _invoiceFileReadRepository.GetAll();

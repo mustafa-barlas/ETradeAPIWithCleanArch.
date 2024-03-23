@@ -6,7 +6,7 @@ namespace ETradeAPI.Persistence.Repositories.InvoiceFileRepository;
 
 public class InvoiceFileWriteRepository : WriteRepository<InvoiceFile>, IInvoiceFileWriteRepository
 {
-    public InvoiceFileWriteRepository(ETradeAPIDbContext context) : base(context)
+    public InvoiceFileWriteRepository(ETradeApiDbContext context) : base(context)
     {
     }
 }

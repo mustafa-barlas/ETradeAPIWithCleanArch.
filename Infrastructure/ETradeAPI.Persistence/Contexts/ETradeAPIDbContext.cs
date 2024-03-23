@@ -5,9 +5,9 @@ using File = ETradeAPI.Domain.Entities.File;
 
 namespace ETradeAPI.Persistence.Contexts;
 
-public class ETradeAPIDbContext : DbContext
+public class ETradeApiDbContext : DbContext
 {
-    public ETradeAPIDbContext(DbContextOptions options) : base(options)
+    public ETradeApiDbContext(DbContextOptions options) : base(options)
     { }
 
     public DbSet<Product> Products { get; set; }

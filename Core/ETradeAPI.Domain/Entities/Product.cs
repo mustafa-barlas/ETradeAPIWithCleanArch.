@@ -10,6 +10,8 @@ public class Product : BaseEntity
 
     public decimal Price { get; set; }
 
+    public ICollection<ProductImageFile> ProductImageFiles { get; set; }
+
     public ICollection<Order> Orders { get; set; } = new List<Order>();
 
 }

@@ -6,7 +6,7 @@ namespace ETradeAPI.Persistence.Repositories.ProductImageFileRepository;
 
 public class ProductImageFileReadRepository : ReadRepository<ProductImageFile>, IProductImageFileReadRepository
 {
-    public ProductImageFileReadRepository(ETradeAPIDbContext context) : base(context)
+    public ProductImageFileReadRepository(ETradeApiDbContext context) : base(context)
     {
     }
 }

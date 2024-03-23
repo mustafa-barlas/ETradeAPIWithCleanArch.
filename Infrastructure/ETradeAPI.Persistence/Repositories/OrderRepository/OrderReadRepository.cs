@@ -6,7 +6,7 @@ namespace ETradeAPI.Persistence.Repositories.OrderRepository;
 
 public class OrderReadRepository : ReadRepository<Order>, IOrderReadRepository
 {
-    public OrderReadRepository(ETradeAPIDbContext context) : base(context)
+    public OrderReadRepository(ETradeApiDbContext context) : base(context)
     {
     }
 }

@@ -6,7 +6,7 @@ namespace ETradeAPI.Persistence.Repositories.ProductRepository;
 
 public class ProductWriteRepository : WriteRepository<Product>, IProductWriteRepository
 {
-    public ProductWriteRepository(ETradeAPIDbContext context) : base(context)
+    public ProductWriteRepository(ETradeApiDbContext context) : base(context)
     {
     }
 }

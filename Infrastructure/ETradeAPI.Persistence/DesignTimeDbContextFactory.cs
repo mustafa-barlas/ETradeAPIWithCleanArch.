@@ -4,15 +4,15 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace ETradeAPI.Persistence;
 
-public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<ETradeAPIDbContext>
+public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<ETradeApiDbContext>
 {
-    public ETradeAPIDbContext CreateDbContext(string[] args)
+    public ETradeApiDbContext CreateDbContext(string[] args)
     {
 
 
-        DbContextOptionsBuilder<ETradeAPIDbContext> dbContextOptionsBuilder = new();
+        DbContextOptionsBuilder<ETradeApiDbContext> dbContextOptionsBuilder = new();
         dbContextOptionsBuilder.UseSqlServer(Configuration.ConnectionString);
 
-        return new ETradeAPIDbContext(dbContextOptionsBuilder.Options);
+        return new ETradeApiDbContext(dbContextOptionsBuilder.Options);
     }
 }

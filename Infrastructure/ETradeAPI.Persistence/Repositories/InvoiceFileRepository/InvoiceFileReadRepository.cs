@@ -6,7 +6,7 @@ namespace ETradeAPI.Persistence.Repositories.InvoiceFileRepository;
 
 public class InvoiceFileReadRepository : ReadRepository<InvoiceFile>, IInvoiceFileReadRepository
 {
-    public InvoiceFileReadRepository(ETradeAPIDbContext context) : base(context)
+    public InvoiceFileReadRepository(ETradeApiDbContext context) : base(context)
     {
     }
 }
