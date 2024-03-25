@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace ETradeAPI.Infrastructure.Services.Storage.Azure
 {
-    public class AzureStorage : Storage, IAzureStorage
+    public class AzureStorage : ETradeAPI.Infrastructure.Services.Storage.Storage, IAzureStorage
     {
         readonly BlobServiceClient _blobServiceClient;
         BlobContainerClient _blobContainerClient;
