@@ -6,7 +6,7 @@ namespace ETradeAPI.Persistence.Repositories.ProductImageFileRepository;
 
 public class ProductImageFileWriteRepository : WriteRepository<ProductImageFile>, IProductImageFileWriteRepository
 {
-    public ProductImageFileWriteRepository(ETradeApiDbContext context) : base(context)
+    public ProductImageFileWriteRepository(ETradeAPIDbContext context) : base(context)
     {
     }
 }

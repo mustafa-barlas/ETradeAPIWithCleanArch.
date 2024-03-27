@@ -6,7 +6,7 @@ namespace ETradeAPI.Persistence.Repositories.CustomerRepository;
 
 public class CustomerWriteRepository : WriteRepository<Customer>, ICustomerWriteRepository
 {
-    public CustomerWriteRepository(ETradeApiDbContext context) : base(context)
+    public CustomerWriteRepository(ETradeAPIDbContext context) : base(context)
     {
     }
 }

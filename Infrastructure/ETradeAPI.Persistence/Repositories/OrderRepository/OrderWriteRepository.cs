@@ -6,7 +6,7 @@ namespace ETradeAPI.Persistence.Repositories.OrderRepository;
 
 public class OrderWriteRepository : WriteRepository<Order>, IOrderWriteRepository
 {
-    public OrderWriteRepository(ETradeApiDbContext context) : base(context)
+    public OrderWriteRepository(ETradeAPIDbContext context) : base(context)
     {
     }
 }

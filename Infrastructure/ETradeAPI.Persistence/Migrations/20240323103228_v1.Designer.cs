@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ETradeAPI.Persistence.Migrations
 {
-    [DbContext(typeof(ETradeApiDbContext))]
+    [DbContext(typeof(ETradeAPIDbContext))]
     [Migration("20240323103228_v1")]
     partial class v1
     {

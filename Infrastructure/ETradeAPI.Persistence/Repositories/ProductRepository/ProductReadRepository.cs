@@ -6,7 +6,7 @@ namespace ETradeAPI.Persistence.Repositories.ProductRepository;
 
 public class ProductReadRepository : ReadRepository<Product>, IProductReadRepository
 {
-    public ProductReadRepository(ETradeApiDbContext context) : base(context)
+    public ProductReadRepository(ETradeAPIDbContext context) : base(context)
     {
     }
 }

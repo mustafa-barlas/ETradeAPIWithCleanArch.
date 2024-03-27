@@ -6,7 +6,7 @@ namespace ETradeAPI.Persistence.Repositories.FileRepository;
 
 public class FileWriteRepository : WriteRepository<File>, IFileWriteRepository
 {
-    public FileWriteRepository(ETradeApiDbContext context) : base(context)
+    public FileWriteRepository(ETradeAPIDbContext context) : base(context)
     {
     }
 }

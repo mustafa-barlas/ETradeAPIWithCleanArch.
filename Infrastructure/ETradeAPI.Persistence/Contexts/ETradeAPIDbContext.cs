@@ -1,13 +1,15 @@
 ﻿using ETradeAPI.Domain.Entities;
 using ETradeAPI.Domain.Entities.Common;
+using ETradeAPI.Domain.Entities.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using File = ETradeAPI.Domain.Entities.File;
 
 namespace ETradeAPI.Persistence.Contexts;
 
-public class ETradeApiDbContext : DbContext
+public class ETradeAPIDbContext : IdentityDbContext<AppUser, AppRole, string>
 {
-    public ETradeApiDbContext(DbContextOptions options) : base(options)
+    public ETradeAPIDbContext(DbContextOptions options) : base(options)
     { }
 
     public DbSet<Product> Products { get; set; }
@@ -16,6 +18,7 @@ public class ETradeApiDbContext : DbContext
     public DbSet<File> Files { get; set; }
     public DbSet<ProductImageFile> ProductImageFiles { get; set; }
     public DbSet<InvoiceFile> InvoiceFiles { get; set; }
+   
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
