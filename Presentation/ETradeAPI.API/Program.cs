@@ -1,11 +1,15 @@
-using ETicaretAPI.Infrastructure;
 using ETradeAPI.Application;
 using ETradeAPI.Application.Validators.Products;
+using ETradeAPI.Infrastructure;
 using ETradeAPI.Infrastructure.Filters;
 using ETradeAPI.Infrastructure.Services.Storage.Azure;
-using ETradeAPI.Infrastructure.Services.Storage.Local;
 using ETradeAPI.Persistence;
 using FluentValidation.AspNetCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+
+// ReSharper disable CommentTypo
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +31,29 @@ builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+
+
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer("Admin", options =>
+    {
+        options.TokenValidationParameters = new()
+        {
+            ValidateAudience = true,  // token degerinini kimler kullanacak
+            ValidateIssuer = true, // tokený kimler dagýtýyor
+            ValidateLifetime = true,  //  token süresini kontrol etme 
+            ValidateIssuerSigningKey = true, // token deðerinin bize ait olup olmadýgýný kontrol eder
+
+            ValidAudience = builder.Configuration["Token:Audience"],
+            ValidIssuer = builder.Configuration["Token:Issuer"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"]))
+        };
+    });
+
+
+
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -39,6 +66,7 @@ app.UseStaticFiles();
 app.UseCors();
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

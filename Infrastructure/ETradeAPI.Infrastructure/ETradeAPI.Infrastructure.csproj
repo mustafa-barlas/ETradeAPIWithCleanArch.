@@ -11,12 +11,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Services\Token\" />
     <Folder Include="Services\Storage\Azure\" />
     <Folder Include="Services\Storage\AWS\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Azure.Storage.Blobs" Version="12.19.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.0" />
   </ItemGroup>
 
 </Project>

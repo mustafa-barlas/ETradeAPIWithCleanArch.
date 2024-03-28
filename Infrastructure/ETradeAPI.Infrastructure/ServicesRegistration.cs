@@ -1,20 +1,22 @@
 ﻿using ETradeAPI.Application.Abstractions.Storage;
+using ETradeAPI.Application.Abstractions.Token;
 using ETradeAPI.Application.Services;
 using ETradeAPI.Infrastructure.Enums;
 using ETradeAPI.Infrastructure.Services;
 using ETradeAPI.Infrastructure.Services.Storage;
 using ETradeAPI.Infrastructure.Services.Storage.Azure;
 using ETradeAPI.Infrastructure.Services.Storage.Local;
+using ETradeAPI.Infrastructure.Services.Token;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ETicaretAPI.Infrastructure
+namespace ETradeAPI.Infrastructure
 {
     public static class ServiceRegistration
     {
         public static void AddInfrastructureServices(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<IStorageService, StorageService>();
-
+            serviceCollection.AddScoped<ITokenHandler, TokenHandler>();
             serviceCollection.AddScoped<IFileService, FileService>();
 
         }
