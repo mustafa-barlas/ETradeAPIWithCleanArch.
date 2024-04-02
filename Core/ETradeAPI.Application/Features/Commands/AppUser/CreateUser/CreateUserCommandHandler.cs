@@ -1,46 +1,34 @@
-﻿using System.Xml;
-using ETradeAPI.Application.Exceptions;
+﻿using ETradeAPI.Application.Abstractions.Services;
+using ETradeAPI.Application.DTOs.User;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
-using P = ETradeAPI.Domain.Entities.Identity;
 
 namespace ETradeAPI.Application.Features.Commands.AppUser.CreateUser;
 
 public class CreateUserCommandHandler : IRequestHandler<CreateUserCommandRequest, CreateUserCommandResponse>
 {
-    private readonly UserManager<P.AppUser> _userManager;
+    private readonly IUserService _userService;
 
-    public CreateUserCommandHandler(UserManager<P.AppUser> userManager)
+    public CreateUserCommandHandler(IUserService userService)
     {
-        _userManager = userManager;
+        _userService = userService;
     }
 
     public async Task<CreateUserCommandResponse> Handle(CreateUserCommandRequest request, CancellationToken cancellationToken)
     {
 
-
-        IdentityResult result = await _userManager.CreateAsync(new P.AppUser()
+        CreateUserResponseDto response = await _userService.CreateAsync(new()
         {
-            Id = Guid.NewGuid().ToString(),
-            UserName = request.Username,
-            Email = request.Email,
             NameSurname = request.NameSurname,
-        }, request.Password);
+            Email = request.Email,
+            Password = request.Password,
+            Username = request.Username,
+            PasswordConfirm = request.PasswordConfirm,
+        });
 
-        CreateUserCommandResponse response = new() { Succeeded = result.Succeeded };
-
-        if (result.Succeeded)
+        return new()
         {
-            response.Message = "Kullanıcı kaydı başarılı";
-        }
-        else
-            foreach (var error in result.Errors)
-            {
-                response.Message += $"{error.Code}{error.Description}\n";
-            }
-
-        return response;
-        //throw new UserCreateFailedException();
-
+            Message = response.Message,
+            Succeeded = response.Succeeded,
+        };
     }
 }

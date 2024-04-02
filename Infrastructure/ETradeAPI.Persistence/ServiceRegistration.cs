@@ -1,4 +1,6 @@
-﻿using ETradeAPI.Application.Repositories.CustomerRepository;
+﻿using ETradeAPI.Application.Abstractions.Services;
+using ETradeAPI.Application.Abstractions.Services.Authentications;
+using ETradeAPI.Application.Repositories.CustomerRepository;
 using ETradeAPI.Application.Repositories.FileRepository;
 using ETradeAPI.Application.Repositories.InvoiceFileRepository;
 using ETradeAPI.Application.Repositories.OrderRepository;
@@ -12,6 +14,7 @@ using ETradeAPI.Persistence.Contexts;
 using ETradeAPI.Persistence.Repositories.FileRepository;
 using ETradeAPI.Persistence.Repositories.InvoiceFileRepository;
 using ETradeAPI.Persistence.Repositories.ProductImageFileRepository;
+using ETradeAPI.Persistence.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -41,6 +44,11 @@ public static class ServiceRegistration
         services.AddScoped<IInvoiceFileReadRepository, InvoiceFileReadRepository>();
         services.AddScoped<IInvoiceFileWriteRepository, InvoiceFileWriteRepository>();
 
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IExternalAuthentication, AuthService>();
+        services.AddScoped<IInternalAuthentication, AuthService>();
+
         services.AddIdentity<AppUser, AppRole>(options =>
         {
             options.Password.RequiredLength = 3;
@@ -49,7 +57,7 @@ public static class ServiceRegistration
             options.Password.RequireLowercase = false;
             options.Password.RequireUppercase = false;
             options.User.RequireUniqueEmail = true;
-           
+
         }).AddEntityFrameworkStores<ETradeAPIDbContext>();  //****************
 
     }

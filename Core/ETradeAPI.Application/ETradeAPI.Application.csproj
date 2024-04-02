@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <Folder Include="Abstractions\Storage\Azure\" />
-    <Folder Include="DTOs\" />
     <Folder Include="Repositories\ProductRepository\" />
   </ItemGroup>
 

@@ -1,8 +1,6 @@
-﻿using MediatR;
+﻿namespace ETradeAPI.Application.DTOs.User;
 
-namespace ETradeAPI.Application.Features.Commands.AppUser.CreateUser;
-
-public class CreateUserCommandRequest : IRequest<CreateUserCommandResponse>
+public class CreateUserDto
 {
     public string NameSurname { get; set; }
 

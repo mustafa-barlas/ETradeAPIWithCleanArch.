@@ -18,7 +18,7 @@ public class TokenHandler : ITokenHandler
         _configuration = configuration;
     }
 
-    public P.Token CreateAccessToken(int minute)
+    public P.Token CreateAccessToken(int second)
     {
         P.Token token = new();
 
@@ -29,7 +29,7 @@ public class TokenHandler : ITokenHandler
 
 
         // token ayarları
-        token.Expiration = DateTime.UtcNow.AddMinutes(minute);
+        token.Expiration = DateTime.UtcNow.AddMinutes(second);
         JwtSecurityToken securityToken = new(
             audience: _configuration["Token:Audience"],
             issuer: _configuration["Token:Issuer"],
