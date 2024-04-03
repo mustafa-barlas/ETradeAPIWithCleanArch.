@@ -6,6 +6,7 @@ using ETradeAPI.Application.Exceptions;
 using ETradeAPI.Domain.Entities.Identity;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Text.Json;
 
@@ -18,15 +19,19 @@ public class AuthService : IAuthService
     private readonly HttpClient _httpClient;
     private readonly IConfiguration _configuration;
     private readonly SignInManager<AppUser> _signInManager;
+    private readonly IUserService _userService;
 
-    public AuthService(UserManager<AppUser> userManager, ITokenHandler tokenHandler, HttpClient httpClient, IConfiguration configuration, SignInManager<AppUser> signInManager)
+    public AuthService(UserManager<AppUser> userManager, ITokenHandler tokenHandler, HttpClient httpClient, IConfiguration configuration, SignInManager<AppUser> signInManager, IUserService userService)
     {
         _userManager = userManager;
         _tokenHandler = tokenHandler;
         _httpClient = httpClient;
         _configuration = configuration;
         _signInManager = signInManager;
+        _userService = userService;
     }
+
+
 
     async Task<Token> CreateUserExternalAsync(AppUser user, string email, string name, UserLoginInfo info, int accessTokenLifeTime)
     {
@@ -53,6 +58,8 @@ public class AuthService : IAuthService
         {
             await _userManager.AddLoginAsync(user, info);
             Token token = _tokenHandler.CreateAccessToken(accessTokenLifeTime);
+
+            await _userService.UpdateRefreshToken(token.RefreshToken, user, token.Expiration, 5);
 
             return token;
         }
@@ -127,9 +134,26 @@ public class AuthService : IAuthService
         if (result.Succeeded)
         {
             Token token = _tokenHandler.CreateAccessToken(accessTokenLifeTime);
+            await _userService.UpdateRefreshToken(token.RefreshToken, user, token.Expiration, 5);
             return token;
         }
 
         throw new AuthenticationErrorException();
+    }
+
+    public async Task<Token> RefreshTokenLoginAsync(string refreshToken)
+    {
+        AppUser? user = await _userManager.Users.FirstOrDefaultAsync(x => x.RefreshToken.Equals(refreshToken));
+
+        if (user != null && user?.RefreshTokenEndDate > DateTime.UtcNow)
+        {
+            Token token = _tokenHandler.CreateAccessToken(30);
+            _userService.UpdateRefreshToken(token.RefreshToken, user, token.Expiration, 30);
+            return token;
+        }
+        else
+        {
+            throw new NotFoundUserException();
+        }
     }
 }

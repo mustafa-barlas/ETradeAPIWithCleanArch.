@@ -1,5 +1,6 @@
 ﻿using ETradeAPI.Application.Abstractions.Services;
 using ETradeAPI.Application.DTOs.User;
+using ETradeAPI.Application.Exceptions;
 using ETradeAPI.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 
@@ -35,6 +36,22 @@ public class UserService : IUserService
                 response.Message += $"{error.Code}{error.Description}\n";
 
         return response;
+
+    }
+
+    public async Task UpdateRefreshToken(string refreshToken, AppUser user, DateTime accessTokenDate, int addOnAccessTokenDate)
+    {
+
+        if (user != null)
+        {
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenEndDate = accessTokenDate.AddSeconds(addOnAccessTokenDate);
+            await _userManager.UpdateAsync(user);
+        }
+        else
+        {
+            throw new NotFoundUserException();
+        }
 
     }
 }
