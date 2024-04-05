@@ -1,7 +1,9 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using ETradeAPI.Application.Abstractions.Token;
+using ETradeAPI.Domain.Entities.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using P = ETradeAPI.Application.DTOs;
@@ -19,7 +21,7 @@ public class TokenHandler : ITokenHandler
         _configuration = configuration;
     }
 
-    public P.Token CreateAccessToken(int second)
+    public P.Token CreateAccessToken(int second, AppUser user)
     {
         P.Token token = new();
 
@@ -36,8 +38,12 @@ public class TokenHandler : ITokenHandler
             issuer: _configuration["Token:Issuer"],
             expires: token.Expiration,
             notBefore: DateTime.UtcNow,
-            signingCredentials: signingCredentials
-            );
+            signingCredentials: signingCredentials,
+            claims: new List<Claim>
+            {
+                new (ClaimTypes.Name,user.UserName)
+            }
+        );
 
         // token oluşturucu sınıfından bir örnek alalım
         JwtSecurityTokenHandler tokenHandler = new();

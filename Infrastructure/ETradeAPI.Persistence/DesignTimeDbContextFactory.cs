@@ -11,7 +11,8 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<ETradeAPID
 
 
         DbContextOptionsBuilder<ETradeAPIDbContext> dbContextOptionsBuilder = new();
-        dbContextOptionsBuilder.UseSqlServer(Configuration.ConnectionString);
+        dbContextOptionsBuilder.UseNpgsql(Configuration.ConnectionString);
+        //dbContextOptionsBuilder.UseSqlServer(Configuration.ConnectionString);
 
         return new ETradeAPIDbContext(dbContextOptionsBuilder.Options);
     }

@@ -10,6 +10,7 @@ namespace ETradeAPI.Infrastructure.Services.Storage.Azure
     {
         readonly BlobServiceClient _blobServiceClient;
         BlobContainerClient _blobContainerClient;
+
         public AzureStorage(IConfiguration configuration)
         {
             _blobServiceClient = new(configuration["Storage:Azure"]);
