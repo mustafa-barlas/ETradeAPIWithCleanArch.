@@ -1,5 +1,6 @@
 ﻿using ETradeAPI.Application.Abstractions.Services;
 using ETradeAPI.Application.Abstractions.Services.Authentications;
+using ETradeAPI.Application.Repositories.BasketItemRepository;
 using ETradeAPI.Application.Repositories.CustomerRepository;
 using ETradeAPI.Application.Repositories.FileRepository;
 using ETradeAPI.Application.Repositories.InvoiceFileRepository;
@@ -11,12 +12,15 @@ using ETradeAPI.Persistence.Repositories.CustomerRepository;
 using ETradeAPI.Persistence.Repositories.OrderRepository;
 using ETradeAPI.Persistence.Repositories.ProductRepository;
 using ETradeAPI.Persistence.Contexts;
+using ETradeAPI.Persistence.Repositories.BasketItemRepository;
 using ETradeAPI.Persistence.Repositories.FileRepository;
 using ETradeAPI.Persistence.Repositories.InvoiceFileRepository;
 using ETradeAPI.Persistence.Repositories.ProductImageFileRepository;
 using ETradeAPI.Persistence.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using ETradeAPI.Application.Repositories.BasketRepository;
+using ETradeAPI.Persistence.Repositories.BasketRepository;
 
 namespace ETradeAPI.Persistence;
 
@@ -44,10 +48,18 @@ public static class ServiceRegistration
         services.AddScoped<IInvoiceFileReadRepository, InvoiceFileReadRepository>();
         services.AddScoped<IInvoiceFileWriteRepository, InvoiceFileWriteRepository>();
 
+        services.AddScoped<IBasketItemReadRepository, BasketItemReadRepository>();
+        services.AddScoped<IBasketItemWriteRepository, BasketItemWriteRepository>();
+
+        services.AddScoped<IBasketReadRepository, BasketReadRepository>();
+        services.AddScoped<IBasketWriteRepository, BasketWriteRepository>();
+
+
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IExternalAuthentication, AuthService>();
         services.AddScoped<IInternalAuthentication, AuthService>();
+        services.AddScoped<IBasketService, BasketService>();
 
         services.AddIdentity<AppUser, AppRole>(options =>
         {

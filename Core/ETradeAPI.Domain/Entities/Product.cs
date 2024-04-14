@@ -14,4 +14,6 @@ public class Product : BaseEntity
 
     public ICollection<Order> Orders { get; set; } = new List<Order>();
 
+    public ICollection<BasketItem> BasketItems { get; set; }
+
 }

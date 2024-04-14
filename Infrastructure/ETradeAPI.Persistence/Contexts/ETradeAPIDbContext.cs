@@ -18,7 +18,9 @@ public class ETradeAPIDbContext : IdentityDbContext<AppUser, AppRole, string>
     public DbSet<File> Files { get; set; }
     public DbSet<ProductImageFile> ProductImageFiles { get; set; }
     public DbSet<InvoiceFile> InvoiceFiles { get; set; }
-   
+    public DbSet<Basket> Baskets { get; set; }
+    public DbSet<BasketItem> BasketItems { get; set; }
+
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
@@ -36,5 +38,18 @@ public class ETradeAPIDbContext : IdentityDbContext<AppUser, AppRole, string>
         }
 
         return await base.SaveChangesAsync(cancellationToken);
+    }
+
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        builder.Entity<Order>().HasKey(x => x.Id);
+
+        builder.Entity<Basket>()
+            .HasOne(x => x.Order)
+            .WithOne(x => x.Basket)
+            .HasForeignKey<Order>(x => x.Id);
+
+        base.OnModelCreating(builder);
     }
 }
