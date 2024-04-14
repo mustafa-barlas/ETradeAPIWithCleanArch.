@@ -1,5 +1,6 @@
 ﻿using ETradeAPI.Application.Repositories.ProductRepository;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace ETradeAPI.Application.Features.Queries.Product.GetAllProduct;
 
@@ -14,9 +15,11 @@ public class GetAllProductQueryHandler : IRequestHandler<GetAllProductQueryReque
 
     public async Task<GetAllProductQueryResponse> Handle(GetAllProductQueryRequest request, CancellationToken cancellationToken)
     {
-        var totalCount = _productReadRepository.GetAll(false).Count();
+        var totalProductCount = _productReadRepository.GetAll(false).Count();
         var products = _productReadRepository.GetAll(false)
-        .Skip(request.Page * request.Size).Take(request.Size)
+        .Skip(request.Page * request.Size)
+        .Take(request.Size)
+        .Include(x => x.ProductImageFiles)
         .Select(x => new
         {
             x.Id,
@@ -24,13 +27,14 @@ public class GetAllProductQueryHandler : IRequestHandler<GetAllProductQueryReque
             x.Price,
             x.Stock,
             x.CreatedDate,
-            x.UpdatedDate
+            x.UpdatedDate,
+            x.ProductImageFiles
         }).ToList();
 
         return new()
         {
             Products = products,
-            TotalCount = totalCount
+            TotalProductCount = totalProductCount
         };
     }
 }

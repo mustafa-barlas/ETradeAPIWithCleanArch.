@@ -1,12 +1,15 @@
 using ETradeAPI.API.Configurations.ColumnWriters;
+using ETradeAPI.API.Extensions;
 using ETradeAPI.Application;
 using ETradeAPI.Application.Validators.Products;
 using ETradeAPI.Infrastructure;
 using ETradeAPI.Infrastructure.Filters;
 using ETradeAPI.Infrastructure.Services.Storage.Azure;
 using ETradeAPI.Persistence;
+using ETradeAPI.SignalR;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Context;
@@ -14,13 +17,14 @@ using Serilog.Core;
 using Serilog.Sinks.PostgreSQL;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.AspNetCore.HttpLogging;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddPersistenceServices();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddApplicationServices();
+builder.Services.AddSignalRServices();
+
 //builder.Services.AddStorage<LocalStorage>();
 builder.Services.AddStorage<AzureStorage>();
 
@@ -115,6 +119,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 
+app.ConfigureExceptionHandler<Program>(app.Services.GetRequiredService<ILogger<Program>>());
+
 //app.UseSerilogRequestLogging();
 
 app.UseHttpLogging();
@@ -135,5 +141,7 @@ app.Use(async (context, next) =>
 
 
 app.MapControllers();
+app.MapHubs();
+//app.MapHub<ProductHub>();
 
 app.Run();

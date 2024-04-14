@@ -134,7 +134,7 @@ public class AuthService : IAuthService
         if (result.Succeeded)
         {
             Token token = _tokenHandler.CreateAccessToken(accessTokenLifeTime, user);
-            await _userService.UpdateRefreshToken(token.RefreshToken, user, token.Expiration, 500);
+            await _userService.UpdateRefreshToken(token.RefreshToken, user, token.Expiration, 300);
             return token;
         }
 

@@ -1,6 +1,7 @@
 ﻿using ETradeAPI.Application.Features.Commands.Product.CreateProduct;
 using ETradeAPI.Application.Features.Commands.Product.RemoveProduct;
 using ETradeAPI.Application.Features.Commands.Product.UpdateProduct;
+using ETradeAPI.Application.Features.Commands.ProductImageFile.ChangeShowcaseImage;
 using ETradeAPI.Application.Features.Commands.ProductImageFile.RemoveProductImage;
 using ETradeAPI.Application.Features.Commands.ProductImageFile.UploadProductImage;
 using ETradeAPI.Application.Features.Queries.Product.GetAllProduct;
@@ -32,7 +33,7 @@ namespace ETradeAPI.API.Controllers
             return Ok(response);
         }
 
-
+        [Authorize(AuthenticationSchemes = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Post(CreateProductCommandRequest request)
         {
@@ -49,7 +50,7 @@ namespace ETradeAPI.API.Controllers
         }
 
 
-
+        [Authorize(AuthenticationSchemes = "Admin")]
         [HttpPut]
         public async Task<IActionResult> Put(UpdateProductCommandRequest request)
         {
@@ -58,7 +59,7 @@ namespace ETradeAPI.API.Controllers
         }
 
 
-
+        [Authorize(AuthenticationSchemes = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] RemoveProductCommandRequest request)
         {
@@ -84,12 +85,21 @@ namespace ETradeAPI.API.Controllers
             return Ok(response);
         }
 
-
+        [Authorize(AuthenticationSchemes = "Admin")]
         [HttpDelete("[action]/{id}")]
         public async Task<IActionResult> DeleteProductImage([FromQuery, FromRoute] RemoveProductImageCommandRequest request)
         {
             RemoveProductImageCommandResponse response = await _mediator.Send(request);
             return Ok();
         }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> ChangeShowcaseImage([FromQuery] ChangeShowcaseImageCommandRequest request)
+        {
+            ChangeShowcaseImageCommandResponse response = await _mediator.Send(request);
+            return Ok(response);
+        }
+
+
     }
 }

@@ -26,10 +26,12 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Infrastructure\ETradeAPI.Infrastructure\ETradeAPI.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Infrastructure\ETradeAPI.Persistence\ETradeAPI.Persistence.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\ETradeAPI.SignalR\ETradeAPI.SignalR.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Configurations\ColumnWriters\" />
+    <Folder Include="Middlewares\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

@@ -1,4 +1,5 @@
-﻿using ETradeAPI.Application.Repositories.ProductRepository;
+﻿using ETradeAPI.Application.Abstractions.Hubs;
+using ETradeAPI.Application.Repositories.ProductRepository;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -8,11 +9,13 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommandR
 {
     private readonly IProductWriteRepository _productWriteRepository;
     private readonly ILogger<CreateProductCommandHandler> _logger;
+    private readonly IProductHubService _productHubService;
 
-    public CreateProductCommandHandler(IProductWriteRepository productWriteRepository, ILogger<CreateProductCommandHandler> logger)
+    public CreateProductCommandHandler(IProductWriteRepository productWriteRepository, ILogger<CreateProductCommandHandler> logger, IProductHubService productHubService)
     {
         _productWriteRepository = productWriteRepository;
         _logger = logger;
+        _productHubService = productHubService;
     }
 
     public async Task<CreateProductCommandResponse> Handle(CreateProductCommandRequest request, CancellationToken cancellationToken)
@@ -26,6 +29,7 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommandR
 
         await _productWriteRepository.SaveAsync();
         _logger.LogInformation("Product Eklendi");
+        await _productHubService.ProductAddedMessageAsync($"{request.Name} ürünü eklendi");
         return new();
     }
 }

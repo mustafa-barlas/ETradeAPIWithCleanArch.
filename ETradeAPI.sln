@@ -5,19 +5,21 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{559B2DB3-E345-48EB-BC1B-88320D79E926}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETradeAPI.Domain", "Core\ETradeAPI.Domain\ETradeAPI.Domain.csproj", "{4E093E8A-4ED6-4111-A148-40AAD3058725}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ETradeAPI.Domain", "Core\ETradeAPI.Domain\ETradeAPI.Domain.csproj", "{4E093E8A-4ED6-4111-A148-40AAD3058725}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETradeAPI.Application", "Core\ETradeAPI.Application\ETradeAPI.Application.csproj", "{A17D9495-7F71-4540-BB91-6390019B8728}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ETradeAPI.Application", "Core\ETradeAPI.Application\ETradeAPI.Application.csproj", "{A17D9495-7F71-4540-BB91-6390019B8728}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{2A46D748-9274-46A5-B807-BA2B1A322000}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETradeAPI.Infrastructure", "Infrastructure\ETradeAPI.Infrastructure\ETradeAPI.Infrastructure.csproj", "{D5BF9778-C546-4431-9A6E-AADB8DBE5509}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ETradeAPI.Infrastructure", "Infrastructure\ETradeAPI.Infrastructure\ETradeAPI.Infrastructure.csproj", "{D5BF9778-C546-4431-9A6E-AADB8DBE5509}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETradeAPI.Persistence", "Infrastructure\ETradeAPI.Persistence\ETradeAPI.Persistence.csproj", "{98BBFBC3-ADEB-45AC-A2CE-8673D01AE01D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ETradeAPI.Persistence", "Infrastructure\ETradeAPI.Persistence\ETradeAPI.Persistence.csproj", "{98BBFBC3-ADEB-45AC-A2CE-8673D01AE01D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{7C68C7C0-BB44-40AD-94A8-67DA411658BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETradeAPI.API", "Presentation\ETradeAPI.API\ETradeAPI.API.csproj", "{781560CA-CAF3-44B0-A660-0B5EAD6727A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ETradeAPI.API", "Presentation\ETradeAPI.API\ETradeAPI.API.csproj", "{781560CA-CAF3-44B0-A660-0B5EAD6727A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETradeAPI.SignalR", "Infrastructure\ETradeAPI.SignalR\ETradeAPI.SignalR.csproj", "{EAFB6D05-286B-4D83-9996-2FBE8A9BC742}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{781560CA-CAF3-44B0-A660-0B5EAD6727A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{781560CA-CAF3-44B0-A660-0B5EAD6727A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{781560CA-CAF3-44B0-A660-0B5EAD6727A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAFB6D05-286B-4D83-9996-2FBE8A9BC742}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAFB6D05-286B-4D83-9996-2FBE8A9BC742}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAFB6D05-286B-4D83-9996-2FBE8A9BC742}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAFB6D05-286B-4D83-9996-2FBE8A9BC742}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +61,7 @@ Global
 		{D5BF9778-C546-4431-9A6E-AADB8DBE5509} = {2A46D748-9274-46A5-B807-BA2B1A322000}
 		{98BBFBC3-ADEB-45AC-A2CE-8673D01AE01D} = {2A46D748-9274-46A5-B807-BA2B1A322000}
 		{781560CA-CAF3-44B0-A660-0B5EAD6727A6} = {7C68C7C0-BB44-40AD-94A8-67DA411658BA}
+		{EAFB6D05-286B-4D83-9996-2FBE8A9BC742} = {2A46D748-9274-46A5-B807-BA2B1A322000}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C57B4480-554D-4F2F-9520-79847CE21C2A}
