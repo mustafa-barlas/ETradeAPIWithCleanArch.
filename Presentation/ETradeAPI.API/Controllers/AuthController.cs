@@ -18,35 +18,31 @@ namespace ETradeAPI.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("[Action]")]
-        public async Task<IActionResult> Login(LoginUserCommandRequest request)
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Login(LoginUserCommandRequest loginUserCommandRequest)
         {
-            LoginUserCommandResponse response = await _mediator.Send(request);
+            LoginUserCommandResponse response = await _mediator.Send(loginUserCommandRequest);
+            return Ok(response);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> RefreshTokenLogin([FromBody] RefreshTokenLoginCommandRequest refreshTokenLoginCommandRequest)
+        {
+            RefreshTokenLoginCommandResponse response = await _mediator.Send(refreshTokenLoginCommandRequest);
             return Ok(response);
         }
 
         [HttpPost("google-login")]
-        public async Task<IActionResult> GoogleLogin(GoogleLoginCommandRequest request)
+        public async Task<IActionResult> GoogleLogin(GoogleLoginCommandRequest googleLoginCommandRequest)
         {
-            GoogleLoginCommandResponse response = await _mediator.Send(request);
-
+            GoogleLoginCommandResponse response = await _mediator.Send(googleLoginCommandRequest);
             return Ok(response);
         }
-
 
         [HttpPost("facebook-login")]
-        public async Task<IActionResult> FacebookLogin(FacebookLoginCommandRequest request)
+        public async Task<IActionResult> FacebookLogin(FacebookLoginCommandRequest facebookLoginCommandRequest)
         {
-            FacebookLoginCommandResponse response = await _mediator.Send(request);
-
-            return Ok(response);
-        }
-
-        [HttpPost("action")]
-        public async Task<IActionResult> RefreshTokenLogin([FromBody] RefreshTokenLoginCommandRequest request)
-        {
-
-            RefreshTokenLoginCommandResponse response = await _mediator.Send(request);
+            FacebookLoginCommandResponse response = await _mediator.Send(facebookLoginCommandRequest);
             return Ok(response);
         }
     }

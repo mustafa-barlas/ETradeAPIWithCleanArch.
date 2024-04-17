@@ -36,11 +36,10 @@ public class AuthService : IAuthService
     async Task<Token> CreateUserExternalAsync(AppUser user, string email, string name, UserLoginInfo info, int accessTokenLifeTime)
     {
         bool result = user != null;
-
-        if (user is null)
+        if (user == null)
         {
             user = await _userManager.FindByEmailAsync(email);
-            if (user is null)
+            if (user == null)
             {
                 user = new()
                 {
@@ -54,51 +53,40 @@ public class AuthService : IAuthService
             }
         }
 
-        if (result) // AspNetUserLogins
+        if (result)
         {
-            await _userManager.AddLoginAsync(user, info);
+            await _userManager.AddLoginAsync(user, info); //AspNetUserLogins
+
             Token token = _tokenHandler.CreateAccessToken(accessTokenLifeTime, user);
-
-            await _userService.UpdateRefreshToken(token.RefreshToken, user, token.Expiration, 500);
-
+            await _userService.UpdateRefreshTokenAsync(token.RefreshToken, user, token.Expiration, 15);
             return token;
         }
-
-        throw new Exception("Invalid external authentication ");
+        throw new Exception("Invalid external authentication.");
     }
 
 
     public async Task<Token> FacebookLoginAsync(string authToken, int accessTokenLifeTime)
     {
-        string accessTokenResponse = await _httpClient.GetStringAsync
-            ($"https://praph.facebook.com/oauth/access_token?client_id={_configuration["ExternalLoginSettings:Facebook:Client_ID"]}&client_secret={_configuration["ExternalLoginSettings:Facebook:Client_Secret"]}&grant_type=client_credentials");
+        string accessTokenResponse = await _httpClient.GetStringAsync($"https://graph.facebook.com/oauth/access_token?client_id={_configuration["ExternalLoginSettings:Facebook:Client_ID"]}&client_secret={_configuration["ExternalLoginSettings:Facebook:Client_Secret"]}&grant_type=client_credentials");
 
-        FacebookAccessTokenResponseDto? facebookAccessTokenResponseDto = JsonSerializer.Deserialize<FacebookAccessTokenResponseDto>(accessTokenResponse);
+        FacebookAccessTokenResponseDto? facebookAccessTokenResponse = JsonSerializer.Deserialize<FacebookAccessTokenResponseDto>(accessTokenResponse);
 
-        string userAccessTokenValidation = await _httpClient.GetStringAsync(
-            $"https://graph.facebook.com/debug-token?input_token={authToken}&access_token={facebookAccessTokenResponseDto?.AccessToken}");
+        string userAccessTokenValidation = await _httpClient.GetStringAsync($"https://graph.facebook.com/debug_token?input_token={authToken}&access_token={facebookAccessTokenResponse?.AccessToken}");
 
+        FacebookUserAccessTokenValidationDto? validation = JsonSerializer.Deserialize<FacebookUserAccessTokenValidationDto>(userAccessTokenValidation);
 
-        FacebookUserAccessTokenValidationDto? validation =
-            JsonSerializer.Deserialize<FacebookUserAccessTokenValidationDto>(userAccessTokenValidation);
-
-        if (validation?.Data.IsValid is null)
+        if (validation?.Data.IsValid != null)
         {
-            string userInfoResponse = await _httpClient.GetStringAsync($"https://praph.facebook.com/me?fields=email,name&access_token={authToken}");
+            string userInfoResponse = await _httpClient.GetStringAsync($"https://graph.facebook.com/me?fields=email,name&access_token={authToken}");
 
-            FacebookUserInfoResponseDto? userInfo =
-                JsonSerializer.Deserialize<FacebookUserInfoResponseDto>(userInfoResponse);
+            FacebookUserInfoResponseDto? userInfo = JsonSerializer.Deserialize<FacebookUserInfoResponseDto>(userInfoResponse);
 
-
-
-            var info = new UserLoginInfo("FACEBOOK", validation?.Data.UserId, "FACEBOOK");
-
+            var info = new UserLoginInfo("FACEBOOK", validation.Data.UserId, "FACEBOOK");
             AppUser user = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
 
             return await CreateUserExternalAsync(user, userInfo.Email, userInfo.Name, info, accessTokenLifeTime);
         }
-        throw new Exception("Invalid external authentication ");
-
+        throw new Exception("Invalid external authentication.");
     }
 
 
@@ -110,8 +98,8 @@ public class AuthService : IAuthService
         };
 
         var payload = await GoogleJsonWebSignature.ValidateAsync(idToken, settings);
-        var info = new UserLoginInfo("GOOGLE", payload.Subject, "GOOGLE");
 
+        var info = new UserLoginInfo("GOOGLE", payload.Subject, "GOOGLE");
         AppUser user = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
 
         return await CreateUserExternalAsync(user, payload.Email, payload.Name, info, accessTokenLifeTime);
@@ -121,39 +109,33 @@ public class AuthService : IAuthService
     public async Task<Token> LoginAsync(string usernameOrEmail, string password, int accessTokenLifeTime)
     {
         AppUser user = await _userManager.FindByNameAsync(usernameOrEmail);
-
-        if (user is null)
+        if (user == null)
             user = await _userManager.FindByEmailAsync(usernameOrEmail);
 
-        if (user is null)
+        if (user == null)
             throw new NotFoundUserException();
 
-
         SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
-
-        if (result.Succeeded)
+        if (result.Succeeded) //Authentication başarılı!
         {
             Token token = _tokenHandler.CreateAccessToken(accessTokenLifeTime, user);
-            await _userService.UpdateRefreshToken(token.RefreshToken, user, token.Expiration, 300);
+            await _userService.UpdateRefreshTokenAsync(token.RefreshToken, user, token.Expiration, 15);
             return token;
         }
-
         throw new AuthenticationErrorException();
     }
 
     public async Task<Token> RefreshTokenLoginAsync(string refreshToken)
     {
-        AppUser? user = await _userManager.Users.FirstOrDefaultAsync(x => x.RefreshToken.Equals(refreshToken));
-
+        AppUser? user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
         if (user != null && user?.RefreshTokenEndDate > DateTime.UtcNow)
         {
-            Token token = _tokenHandler.CreateAccessToken(300, user);
-            _userService.UpdateRefreshToken(token.RefreshToken, user, token.Expiration, 300);
+            Token token = _tokenHandler.CreateAccessToken(15, user);
+            await _userService.UpdateRefreshTokenAsync(token.RefreshToken, user, token.Expiration, 300);
             return token;
         }
         else
-        {
             throw new NotFoundUserException();
-        }
     }
+
 }

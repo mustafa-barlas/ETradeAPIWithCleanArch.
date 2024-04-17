@@ -1,5 +1,5 @@
-﻿using ETicaretAPI.Infrastructure.Operations;
-using ETradeAPI.Application.Services;
+﻿using ETradeAPI.Application.Services;
+using ETradeAPI.Infrastructure.Operations;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
@@ -81,7 +81,7 @@ public class FileService : IFileService  ////  DEPRECATED
 
 
                       int indexNo2 = newFileName.IndexOf(".");
-                      string fileNo = newFileName.Substring(indexNo1 +1, indexNo2 - indexNo1 - 1);
+                      string fileNo = newFileName.Substring(indexNo1 + 1, indexNo2 - indexNo1 - 1);
 
 
                       if (int.TryParse(fileNo, out int _fileNo))
@@ -91,7 +91,7 @@ public class FileService : IFileService  ////  DEPRECATED
                       }
                       else
                       {
-                          
+
                       }
 
 

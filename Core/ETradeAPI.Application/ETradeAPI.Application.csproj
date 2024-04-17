@@ -11,7 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Abstractions\Hubs\" />
     <Folder Include="Abstractions\Storage\Azure\" />
     <Folder Include="Repositories\ProductRepository\" />
   </ItemGroup>

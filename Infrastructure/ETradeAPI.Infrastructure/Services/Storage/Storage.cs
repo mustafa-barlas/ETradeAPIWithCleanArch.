@@ -1,11 +1,10 @@
-﻿using ETicaretAPI.Infrastructure.Operations;
+﻿using ETradeAPI.Infrastructure.Operations;
 
 namespace ETradeAPI.Infrastructure.Services.Storage
 {
     public class Storage
     {
         protected delegate bool HasFile(string pathOrContainerName, string fileName);
-
         protected async Task<string> FileRenameAsync(string pathOrContainerName, string fileName, HasFile hasFileMethod, bool first = true)
         {
             string newFileName = await Task.Run<string>(async () =>

@@ -1,4 +1,4 @@
-﻿using ETradeAPI.Application.ViewModels.Products;
+﻿using ETradeAPI.Application.ViewModels.Product;
 using FluentValidation;
 
 namespace ETradeAPI.Application.Validators.Products;

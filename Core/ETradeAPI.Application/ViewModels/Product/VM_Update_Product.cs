@@ -1,4 +1,4 @@
-﻿namespace ETradeAPI.Application.ViewModels.Products;
+﻿namespace ETradeAPI.Application.ViewModels.Product;
 
 public class VM_Update_Product
 {

@@ -8,26 +8,24 @@ namespace ETradeAPI.Application.Features.Queries.ProductImageFile.GetProductImag
 
 public class GetProductImagesQueryHandler : IRequestHandler<GetProductImagesQueryRequest, List<GetProductImagesQueryResponse>>
 {
-    private readonly IProductReadRepository _productReadRepository;
-    private readonly IConfiguration _configuration;
+    readonly IProductReadRepository _productReadRepository;
+    readonly IConfiguration configuration;
 
     public GetProductImagesQueryHandler(IProductReadRepository productReadRepository, IConfiguration configuration)
     {
         _productReadRepository = productReadRepository;
-        _configuration = configuration;
+        this.configuration = configuration;
     }
 
     public async Task<List<GetProductImagesQueryResponse>> Handle(GetProductImagesQueryRequest request, CancellationToken cancellationToken)
     {
-        P.Product? product = await _productReadRepository.Table.Include(x => x.ProductImageFiles)
-            .FirstOrDefaultAsync(x => x.Id.Equals(Guid.Parse(request.Id)));
-
-
-        return product.ProductImageFiles.Select(x => new GetProductImagesQueryResponse()
+        Domain.Entities.Product? product = await _productReadRepository.Table.Include(p => p.ProductImageFiles)
+            .FirstOrDefaultAsync(p => p.Id == Guid.Parse(request.Id));
+        return product?.ProductImageFiles.Select(p => new GetProductImagesQueryResponse
         {
-            FileName = x.FileName,
-            Id = x.Id,
-            Path = $"{_configuration["BaseStorageUrl"]}/{x.Path}",
+            Path = $"{configuration["BaseStorageUrl"]}/{p.Path}",
+            FileName = p.FileName,
+            Id = p.Id
         }).ToList();
     }
 }

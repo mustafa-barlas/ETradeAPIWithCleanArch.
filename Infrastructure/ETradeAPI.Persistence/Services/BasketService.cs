@@ -32,6 +32,8 @@ public class BasketService : IBasketService
         _basketReadRepository = basketReadRepository;
     }
 
+
+
     private async Task<Basket?> ContextUser()
     {
         var username = _contextAccessor.HttpContext?.User.Identity?.Name;
@@ -70,7 +72,6 @@ public class BasketService : IBasketService
         throw new Exception("Beklenmeyen bir hata ile karşılaşıldı");
 
     }
-
 
     public async Task<List<BasketItem>> GetBasketItemsAsync()
     {
@@ -126,5 +127,14 @@ public class BasketService : IBasketService
             await _basketItemWriteRepository.SaveAsync();
         }
 
+    }
+
+    public Basket? GetUserActiveBasket
+    {
+        get
+        {
+            Basket? basket = ContextUser().Result;
+            return basket;
+        }
     }
 }

@@ -6,11 +6,10 @@ using Microsoft.Extensions.Configuration;
 
 namespace ETradeAPI.Infrastructure.Services.Storage.Azure
 {
-    public class AzureStorage : ETradeAPI.Infrastructure.Services.Storage.Storage, IAzureStorage
+    public class AzureStorage : Storage, IAzureStorage
     {
         readonly BlobServiceClient _blobServiceClient;
         BlobContainerClient _blobContainerClient;
-
         public AzureStorage(IConfiguration configuration)
         {
             _blobServiceClient = new(configuration["Storage:Azure"]);

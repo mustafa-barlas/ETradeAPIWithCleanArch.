@@ -8,8 +8,8 @@ namespace ETradeAPI.Application.Features.Commands.ProductImageFile.RemoveProduct
 public class RemoveProductImageCommandHandler : IRequestHandler<RemoveProductImageCommandRequest, RemoveProductImageCommandResponse>
 {
 
-    private readonly IProductReadRepository _productReadRepository;
-    private readonly IProductWriteRepository _productWriteRepository;
+    readonly IProductReadRepository _productReadRepository;
+    readonly IProductWriteRepository _productWriteRepository;
 
     public RemoveProductImageCommandHandler(IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository)
     {
@@ -19,14 +19,15 @@ public class RemoveProductImageCommandHandler : IRequestHandler<RemoveProductIma
 
     public async Task<RemoveProductImageCommandResponse> Handle(RemoveProductImageCommandRequest request, CancellationToken cancellationToken)
     {
-        P.Product? product = await _productReadRepository.Table.Include(x => x.ProductImageFiles).FirstOrDefaultAsync(x => x.Id.Equals(Guid.Parse(request.Id)));
+        Domain.Entities.Product? product = await _productReadRepository.Table.Include(p => p.ProductImageFiles)
+            .FirstOrDefaultAsync(p => p.Id == Guid.Parse(request.Id));
 
+        Domain.Entities.ProductImageFile? productImageFile = product?.ProductImageFiles.FirstOrDefault(p => p.Id == Guid.Parse(request.ImageId));
 
-        P.ProductImageFile productImage = product.ProductImageFiles.FirstOrDefault(x => x.Id.Equals(Guid.Parse(request.ImageId)));
+        if (productImageFile != null)
+            product?.ProductImageFiles.Remove(productImageFile);
 
-        product.ProductImageFiles.Remove(productImage);
         await _productWriteRepository.SaveAsync();
-
         return new();
     }
 }
