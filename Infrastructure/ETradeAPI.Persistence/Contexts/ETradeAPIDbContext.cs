@@ -45,6 +45,10 @@ public class ETradeAPIDbContext : IdentityDbContext<AppUser, AppRole, string>
     {
         builder.Entity<Order>().HasKey(x => x.Id);
 
+        builder.Entity<Order>()
+            .HasIndex(x => x.OrderCode)
+            .IsUnique();
+
         builder.Entity<Basket>()
             .HasOne(x => x.Order)
             .WithOne(x => x.Basket)

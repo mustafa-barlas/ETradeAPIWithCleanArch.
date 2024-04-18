@@ -3,6 +3,7 @@ using System;
 using ETradeAPI.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ETradeAPI.Persistence.Migrations
 {
     [DbContext(typeof(ETradeAPIDbContext))]
-    partial class ETradeAPIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240418155109_2.9")]
+    partial class _29
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -252,9 +254,6 @@ namespace ETradeAPI.Persistence.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrderCode")
-                        .IsUnique();
 
                     b.ToTable("Orders");
                 });
