@@ -38,7 +38,7 @@ builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
 Logger log = new LoggerConfiguration()
     .WriteTo.Console()
     .WriteTo.File("logs/log.txt")
-    .WriteTo.PostgreSQL(builder.Configuration.GetConnectionString("PostgreSQL"), "logs",
+    .WriteTo.PostgreSQL(builder.Configuration.GetConnectionString("DbConnectionString"), "logs",
         needAutoCreateTable: true,
         columnOptions: new Dictionary<string, ColumnWriterBase>
         {
@@ -69,7 +69,7 @@ builder.Services.AddHttpLogging(logging =>
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<ValidationFilter>();
-    //options.Filters.Add<RolePermissionFilter>();
+    
 })
     .AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<CreateProductValidator>())
     .ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true);

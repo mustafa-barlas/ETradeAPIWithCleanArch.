@@ -3,6 +3,7 @@ using System;
 using ETradeAPI.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ETradeAPI.Persistence.Migrations
 {
     [DbContext(typeof(ETradeAPIDbContext))]
-    partial class ETradeAPIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240419180850_v3.3")]
+    partial class v33
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,6 +32,10 @@ namespace ETradeAPI.Persistence.Migrations
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("OrderId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("timestamp with time zone");
@@ -73,29 +79,6 @@ namespace ETradeAPI.Persistence.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("BasketItems");
-                });
-
-            modelBuilder.Entity("ETradeAPI.Domain.Entities.CompletedOrder", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId")
-                        .IsUnique();
-
-                    b.ToTable("CompletedOrders");
                 });
 
             modelBuilder.Entity("ETradeAPI.Domain.Entities.Customer", b =>
@@ -480,17 +463,6 @@ namespace ETradeAPI.Persistence.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("ETradeAPI.Domain.Entities.CompletedOrder", b =>
-                {
-                    b.HasOne("ETradeAPI.Domain.Entities.Order", "Order")
-                        .WithOne("CompletedOrder")
-                        .HasForeignKey("ETradeAPI.Domain.Entities.CompletedOrder", "OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-                });
-
             modelBuilder.Entity("ETradeAPI.Domain.Entities.Order", b =>
                 {
                     b.HasOne("ETradeAPI.Domain.Entities.Basket", "Basket")
@@ -579,12 +551,6 @@ namespace ETradeAPI.Persistence.Migrations
             modelBuilder.Entity("ETradeAPI.Domain.Entities.Identity.AppUser", b =>
                 {
                     b.Navigation("Baskets");
-                });
-
-            modelBuilder.Entity("ETradeAPI.Domain.Entities.Order", b =>
-                {
-                    b.Navigation("CompletedOrder")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("ETradeAPI.Domain.Entities.Product", b =>

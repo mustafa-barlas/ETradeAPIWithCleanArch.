@@ -20,12 +20,15 @@ public class ETradeAPIDbContext : IdentityDbContext<AppUser, AppRole, string>
     public DbSet<InvoiceFile> InvoiceFiles { get; set; }
     public DbSet<Basket> Baskets { get; set; }
     public DbSet<BasketItem> BasketItems { get; set; }
+    public DbSet<CompletedOrder> CompletedOrders { get; set; }
 
 
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
+        //ChangeTracker : Entityler üzerinden yapılan değişiklerin ya da yeni eklenen verinin yakalanmasını sağlayan propertydir. Update operasyonlarında Track edilen verileri yakalayıp elde etmemizi sağlar.
 
-        var datas = ChangeTracker.Entries<BaseEntity>();
+        var datas = ChangeTracker
+            .Entries<BaseEntity>();
 
         foreach (var data in datas)
         {
@@ -33,26 +36,32 @@ public class ETradeAPIDbContext : IdentityDbContext<AppUser, AppRole, string>
             {
                 EntityState.Added => data.Entity.CreatedDate = DateTime.UtcNow,
                 EntityState.Modified => data.Entity.UpdatedDate = DateTime.UtcNow,
-                _ => DateTime.UtcNow,
+                _ => DateTime.UtcNow
             };
         }
 
         return await base.SaveChangesAsync(cancellationToken);
     }
 
-
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.Entity<Order>().HasKey(x => x.Id);
+        builder.Entity<Order>()
+            .HasKey(b => b.Id);
 
         builder.Entity<Order>()
-            .HasIndex(x => x.OrderCode)
+            .HasIndex(o => o.OrderCode)
             .IsUnique();
 
         builder.Entity<Basket>()
-            .HasOne(x => x.Order)
-            .WithOne(x => x.Basket)
-            .HasForeignKey<Order>(x => x.Id);
+            .HasOne(b => b.Order)
+            .WithOne(o => o.Basket)
+            .HasForeignKey<Order>(b => b.Id);
+
+        builder.Entity<Order>()
+            .HasOne(o => o.CompletedOrder)
+            .WithOne(c => c.Order)
+            .HasForeignKey<CompletedOrder>(c => c.OrderId);
+
 
         base.OnModelCreating(builder);
     }

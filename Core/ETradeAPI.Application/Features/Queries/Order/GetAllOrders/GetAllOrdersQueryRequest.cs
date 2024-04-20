@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace ETradeAPI.Application.Features.Queries.Order.GetAllOrder;
+namespace ETradeAPI.Application.Features.Queries.Order.GetAllOrders;
 
 public class GetAllOrdersQueryRequest : IRequest<GetAllOrdersQueryResponse>
 {

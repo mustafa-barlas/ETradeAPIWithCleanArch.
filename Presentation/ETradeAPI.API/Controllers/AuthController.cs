@@ -1,7 +1,9 @@
 ﻿using ETradeAPI.Application.Features.Commands.AppUser.FacebookLogin;
 using ETradeAPI.Application.Features.Commands.AppUser.GoogleLogin;
 using ETradeAPI.Application.Features.Commands.AppUser.LoginUser;
+using ETradeAPI.Application.Features.Commands.AppUser.PasswordReset;
 using ETradeAPI.Application.Features.Commands.AppUser.RefreshTokenLogin;
+using ETradeAPI.Application.Features.Commands.AppUser.VerifyResetToken;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,6 +45,20 @@ namespace ETradeAPI.API.Controllers
         public async Task<IActionResult> FacebookLogin(FacebookLoginCommandRequest facebookLoginCommandRequest)
         {
             FacebookLoginCommandResponse response = await _mediator.Send(facebookLoginCommandRequest);
+            return Ok(response);
+        }
+
+        [HttpPost("password-reset")]
+        public async Task<IActionResult> PasswordReset([FromBody] PasswordResetCommandRequest request)
+        {
+            PasswordResetCommandResponse response = await _mediator.Send(request);
+            return Ok(response);
+        }
+
+        [HttpPost("verify-reset-token")]
+        public async Task<IActionResult> VerifyResetToken([FromBody] VerifyResetTokenCommandRequest request)
+        {
+            VerifyResetTokenCommandResponse response = await _mediator.Send(request);
             return Ok(response);
         }
     }

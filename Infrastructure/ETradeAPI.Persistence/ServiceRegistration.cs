@@ -21,6 +21,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ETradeAPI.Application.Repositories.BasketRepository;
 using ETradeAPI.Persistence.Repositories.BasketRepository;
+using Microsoft.AspNetCore.Identity;
 
 namespace ETradeAPI.Persistence;
 
@@ -71,7 +72,8 @@ public static class ServiceRegistration
             options.Password.RequireUppercase = false;
             options.User.RequireUniqueEmail = true;
 
-        }).AddEntityFrameworkStores<ETradeAPIDbContext>();  //****************
+        }).AddEntityFrameworkStores<ETradeAPIDbContext>()
+            .AddDefaultTokenProviders(); // Password Reset token üretmemizi sağlıyor.
 
     }
 }

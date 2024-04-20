@@ -1,4 +1,5 @@
-﻿using ETradeAPI.Application.Abstractions.Services;
+﻿using System.Text;
+using ETradeAPI.Application.Abstractions.Services;
 using ETradeAPI.Application.Abstractions.Token;
 using ETradeAPI.Application.DTOs;
 using ETradeAPI.Application.DTOs.Facebook;
@@ -9,6 +10,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Text.Json;
+using ETradeAPI.Application.Helpers;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace ETradeAPI.Persistence.Services;
 
@@ -20,8 +23,9 @@ public class AuthService : IAuthService
     private readonly IConfiguration _configuration;
     private readonly SignInManager<AppUser> _signInManager;
     private readonly IUserService _userService;
+    private readonly IMailService _mailService;
 
-    public AuthService(UserManager<AppUser> userManager, ITokenHandler tokenHandler, HttpClient httpClient, IConfiguration configuration, SignInManager<AppUser> signInManager, IUserService userService)
+    public AuthService(UserManager<AppUser> userManager, ITokenHandler tokenHandler, HttpClient httpClient, IConfiguration configuration, SignInManager<AppUser> signInManager, IUserService userService, IMailService mailService)
     {
         _userManager = userManager;
         _tokenHandler = tokenHandler;
@@ -29,6 +33,7 @@ public class AuthService : IAuthService
         _configuration = configuration;
         _signInManager = signInManager;
         _userService = userService;
+        _mailService = mailService;
     }
 
 
@@ -116,7 +121,7 @@ public class AuthService : IAuthService
             throw new NotFoundUserException();
 
         SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
-        if (result.Succeeded) //Authentication başarılı!
+        if (result.Succeeded) //Authentication is success!
         {
             Token token = _tokenHandler.CreateAccessToken(accessTokenLifeTime, user);
             await _userService.UpdateRefreshTokenAsync(token.RefreshToken, user, token.Expiration, 15);
@@ -138,4 +143,31 @@ public class AuthService : IAuthService
             throw new NotFoundUserException();
     }
 
+    public async Task PasswordResetAsync(string mail)
+    {
+        AppUser user = await _userManager.FindByEmailAsync(mail);
+
+        if (user is not null)
+        {
+            string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            resetToken = resetToken.UrlEncode();
+
+            await _mailService.SendPasswordResetMailAsync(mail, user.Id, resetToken);
+        }
+    }
+
+    public async Task<bool> VerifyResetTokenAsync(string resetToken, string userId)
+    {
+
+        AppUser user = await _userManager.FindByIdAsync(userId);
+
+        if (user is not null)
+        {
+            resetToken = resetToken.UrlDecode();
+
+            await _userManager.VerifyUserTokenAsync(user, _userManager.Options.Tokens.PasswordResetTokenProvider, "ResetPassword", resetToken);
+        }
+        return false;
+    }
 }

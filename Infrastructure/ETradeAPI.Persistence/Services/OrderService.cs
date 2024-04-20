@@ -58,4 +58,28 @@ public class OrderService : IOrderService
             }).ToListAsync()
         };
     }
+
+    public async Task<SingleOrderDto> GetOrderById(string id)
+    {
+        var data = await _orderReadRepository.Table
+            .Include(x => x.Basket)
+            .ThenInclude(x => x.BasketItems)
+            .ThenInclude(x => x.Product)
+            .FirstOrDefaultAsync(x => x.Id.Equals(Guid.Parse(id)));
+
+        return new()
+        {
+            Id = data.Id.ToString(),
+            BasketItems = data.Basket.BasketItems.Select(x => new
+            {
+                x.Product.Name,
+                x.Product.Price,
+                x.Quantity
+            }),
+            Address = data.Address,
+            OrderCode = data.OrderCode,
+            CreatedDate = data.CreatedDate,
+            Description = data.Description
+        };
+    }
 }
