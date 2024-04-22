@@ -14,7 +14,7 @@ public class GetOrderByIdQueryHandler : IRequestHandler<GetOrderByIdQueryRequest
 
     public async Task<GetOrderByIdQueryResponse> Handle(GetOrderByIdQueryRequest request, CancellationToken cancellationToken)
     {
-        var data = await _orderService.GetOrderById(request.Id);
+        var data = await _orderService.GetOrderByIdAsync(request.Id);
 
         return new()
         {
@@ -24,6 +24,7 @@ public class GetOrderByIdQueryHandler : IRequestHandler<GetOrderByIdQueryRequest
             BasketItems = data.BasketItems,
             Address = data.Address,
             Description = data.Description,
+            Completed = data.Completed,
         };
     }
 }

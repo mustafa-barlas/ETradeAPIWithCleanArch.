@@ -12,6 +12,9 @@
 
   <ItemGroup>
     <Folder Include="Abstractions\Storage\Azure\" />
+    <Folder Include="DTOs\ConfigurationDto\" />
+    <Folder Include="Enums\" />
+    <Folder Include="Constants\" />
     <Folder Include="Repositories\ProductRepository\" />
   </ItemGroup>
 

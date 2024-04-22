@@ -14,4 +14,6 @@ public class GetOrderByIdQueryResponse
 
     public string Id { get; set; }
 
+    public bool Completed { get; set; }
+
 }

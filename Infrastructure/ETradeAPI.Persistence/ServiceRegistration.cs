@@ -20,7 +20,9 @@ using ETradeAPI.Persistence.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ETradeAPI.Application.Repositories.BasketRepository;
+using ETradeAPI.Application.Repositories.CompletedOrderRepository;
 using ETradeAPI.Persistence.Repositories.BasketRepository;
+using ETradeAPI.Persistence.Repositories.CompletedOrderRepository;
 using Microsoft.AspNetCore.Identity;
 
 namespace ETradeAPI.Persistence;
@@ -55,6 +57,8 @@ public static class ServiceRegistration
         services.AddScoped<IBasketReadRepository, BasketReadRepository>();
         services.AddScoped<IBasketWriteRepository, BasketWriteRepository>();
 
+        services.AddScoped<ICompletedOrderReadRepository, CompletedOrderReadRepository>();
+        services.AddScoped<ICompletedOrderWriteRepository, CompletedOrderWriteRepository>();
 
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IAuthService, AuthService>();

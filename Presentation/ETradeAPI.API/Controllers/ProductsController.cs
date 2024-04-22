@@ -1,4 +1,7 @@
-﻿using ETradeAPI.Application.Features.Commands.Product.CreateProduct;
+﻿using ETradeAPI.Application.Constants;
+using ETradeAPI.Application.CustomAttributes;
+using ETradeAPI.Application.Enums;
+using ETradeAPI.Application.Features.Commands.Product.CreateProduct;
 using ETradeAPI.Application.Features.Commands.Product.RemoveProduct;
 using ETradeAPI.Application.Features.Commands.Product.UpdateProduct;
 using ETradeAPI.Application.Features.Commands.ProductImageFile.ChangeShowcaseImage;
@@ -33,8 +36,9 @@ namespace ETradeAPI.API.Controllers
             return Ok(response);
         }
 
-        [Authorize(AuthenticationSchemes = "Admin")]
+
         [HttpPost]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Products, ActionType = ActionType.Writing, Definition = "Create Product")]
         public async Task<IActionResult> Post(CreateProductCommandRequest request)
         {
             CreateProductCommandResponse response = await _mediator.Send(request);
@@ -50,8 +54,9 @@ namespace ETradeAPI.API.Controllers
         }
 
 
-        [Authorize(AuthenticationSchemes = "Admin")]
+
         [HttpPut]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Products, ActionType = ActionType.Updating, Definition = "Update Product")]
         public async Task<IActionResult> Put(UpdateProductCommandRequest request)
         {
             UpdateProductCommandResponse response = await _mediator.Send(request);
@@ -59,8 +64,9 @@ namespace ETradeAPI.API.Controllers
         }
 
 
-        [Authorize(AuthenticationSchemes = "Admin")]
+
         [HttpDelete("{id}")]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Products, ActionType = ActionType.Deleting, Definition = "Delete Product")]
         public async Task<IActionResult> Delete([FromRoute] RemoveProductCommandRequest request)
         {
             RemoveProductCommandResponse response = await _mediator.Send(request);
@@ -69,6 +75,7 @@ namespace ETradeAPI.API.Controllers
 
 
         [HttpPost("[action]")]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Products, ActionType = ActionType.Writing, Definition = "Upload Product File")]
         public async Task<IActionResult> Upload([FromQuery, FromForm] UploadProductImageCommandRequest request)
         {
             request.Files = Request.Form.Files;
@@ -85,8 +92,9 @@ namespace ETradeAPI.API.Controllers
             return Ok(response);
         }
 
-        [Authorize(AuthenticationSchemes = "Admin")]
+
         [HttpDelete("[action]/{id}")]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Products, ActionType = ActionType.Deleting, Definition = "Delete Product Image")]
         public async Task<IActionResult> DeleteProductImage([FromQuery, FromRoute] RemoveProductImageCommandRequest request)
         {
             RemoveProductImageCommandResponse response = await _mediator.Send(request);
@@ -94,6 +102,7 @@ namespace ETradeAPI.API.Controllers
         }
 
         [HttpGet("[action]")]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Products, ActionType = ActionType.Updating, Definition = "Change  Showcase Product Image")]
         public async Task<IActionResult> ChangeShowcaseImage([FromQuery] ChangeShowcaseImageCommandRequest request)
         {
             ChangeShowcaseImageCommandResponse response = await _mediator.Send(request);

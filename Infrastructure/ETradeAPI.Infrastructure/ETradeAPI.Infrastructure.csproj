@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Services\Configurations\" />
     <Folder Include="Services\Token\" />
     <Folder Include="Services\Storage\Azure\" />
     <Folder Include="Services\Storage\AWS\" />

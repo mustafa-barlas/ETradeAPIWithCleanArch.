@@ -4,9 +4,11 @@ namespace ETradeAPI.Application.Abstractions.Services;
 
 public interface IOrderService
 {
-    public Task CreateOrderAsync(CreateOrderDto createOrder);
+    Task CreateOrderAsync(CreateOrderDto createOrder);
 
-    public Task<ListOrderDto> GetAllOrdersAsync(int page, int size);
+    Task<ListOrderDto> GetAllOrdersAsync(int page, int size);
 
-    public Task<SingleOrderDto> GetOrderById(string id);
+    Task<SingleOrderDto> GetOrderByIdAsync(string id);
+
+    Task<(bool, CompletedOrderDto)> CompleteOrderAsync(string id);
 }

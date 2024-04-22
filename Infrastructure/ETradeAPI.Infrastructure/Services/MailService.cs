@@ -52,4 +52,13 @@ public class MailService : IMailService
 
         await SendMailAsync(to, "Şifre Yenileme Talebi", mail.ToString());
     }
+
+    public async Task SendCompletedOrderMailAsync(string to, string Name, string userSurname, string orderCode, DateTime orderDate)
+    {
+
+        string mail = $"Sayın {Name} {userSurname}Merhaba<br> " +
+                      $"{orderDate} tarihinde vermiş oldugunuz {orderCode} kodlu siparişiniz alınmıştır.";
+
+        await SendMailAsync(to, $"{orderCode} Siparişiniz alındı", mail);
+    }
 }
