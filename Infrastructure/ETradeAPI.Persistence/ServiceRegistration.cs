@@ -66,6 +66,7 @@ public static class ServiceRegistration
         services.AddScoped<IInternalAuthentication, AuthService>();
         services.AddScoped<IBasketService, BasketService>();
         services.AddScoped<IOrderService, OrderService>();
+        services.AddScoped<IRoleService, RoleService>();
 
         services.AddIdentity<AppUser, AppRole>(options =>
         {

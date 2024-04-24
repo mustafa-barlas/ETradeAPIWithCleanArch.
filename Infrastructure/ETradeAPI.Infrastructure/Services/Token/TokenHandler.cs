@@ -1,12 +1,11 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
-using ETradeAPI.Application.Abstractions.Token;
+﻿using ETradeAPI.Application.Abstractions.Token;
 using ETradeAPI.Domain.Entities.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using P = ETradeAPI.Application.DTOs;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 // ReSharper disable CommentTypo
 
 
@@ -14,24 +13,24 @@ namespace ETradeAPI.Infrastructure.Services.Token;
 
 public class TokenHandler : ITokenHandler
 {
-    private readonly IConfiguration _configuration;
+    readonly IConfiguration _configuration;
 
     public TokenHandler(IConfiguration configuration)
     {
         _configuration = configuration;
     }
 
-    public P.Token CreateAccessToken(int second, AppUser user)
+    public Application.DTOs.Token CreateAccessToken(int second, AppUser user)
     {
-        P.Token token = new();
+        Application.DTOs.Token token = new();
 
+        //Security Key'in simetriğini alıyoruz.
+        SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(_configuration["Token:SecurityKey"]));
 
-        SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(_configuration["Token:SecurityKey"])); // keyin simetrii alındı
+        //Şifrelenmiş kimliği oluşturuyoruz.
+        SigningCredentials signingCredentials = new(securityKey, SecurityAlgorithms.HmacSha256);
 
-        SigningCredentials signingCredentials = new(securityKey, SecurityAlgorithms.HmacSha256); // şifrelenmiş kimlik oluşturuldu
-
-
-        // token ayarları
+        //Oluşturulacak token ayarlarını veriyoruz.
         token.Expiration = DateTime.UtcNow.AddSeconds(second);
         JwtSecurityToken securityToken = new(
             audience: _configuration["Token:Audience"],
@@ -39,32 +38,24 @@ public class TokenHandler : ITokenHandler
             expires: token.Expiration,
             notBefore: DateTime.UtcNow,
             signingCredentials: signingCredentials,
-            claims: new List<Claim>
-            {
-                new (ClaimTypes.Name,user.UserName)
-            }
+            claims: new List<Claim> { new(ClaimTypes.Name, user.UserName) }
         );
 
-        // token oluşturucu sınıfından bir örnek alalım
+        //Token oluşturucu sınıfından bir örnek alalım.
         JwtSecurityTokenHandler tokenHandler = new();
         token.AccessToken = tokenHandler.WriteToken(securityToken);
 
-        token.RefreshToken = CreateRefreshToken();
+        //string refreshToken = CreateRefreshToken();
 
+        token.RefreshToken = CreateRefreshToken();
         return token;
     }
 
-
     public string CreateRefreshToken()
     {
-
         byte[] number = new byte[32];
-
         using RandomNumberGenerator random = RandomNumberGenerator.Create();
-
         random.GetBytes(number);
-
         return Convert.ToBase64String(number);
-
     }
 }

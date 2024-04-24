@@ -1,7 +1,4 @@
 ﻿using ETradeAPI.Application.Abstractions.Services;
-using ETradeAPI.Application.Constants;
-using ETradeAPI.Application.CustomAttributes;
-using ETradeAPI.Application.Enums;
 using ETradeAPI.Application.Features.Commands.AppUser.CreateUser;
 using ETradeAPI.Application.Features.Commands.AppUser.UpdatePassword;
 using MediatR;

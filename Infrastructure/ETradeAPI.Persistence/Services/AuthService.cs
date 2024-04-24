@@ -1,17 +1,15 @@
-﻿using System.Text;
-using ETradeAPI.Application.Abstractions.Services;
+﻿using ETradeAPI.Application.Abstractions.Services;
 using ETradeAPI.Application.Abstractions.Token;
 using ETradeAPI.Application.DTOs;
 using ETradeAPI.Application.DTOs.Facebook;
 using ETradeAPI.Application.Exceptions;
+using ETradeAPI.Application.Helpers;
 using ETradeAPI.Domain.Entities.Identity;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Text.Json;
-using ETradeAPI.Application.Helpers;
-using Microsoft.AspNetCore.WebUtilities;
 
 namespace ETradeAPI.Persistence.Services;
 
