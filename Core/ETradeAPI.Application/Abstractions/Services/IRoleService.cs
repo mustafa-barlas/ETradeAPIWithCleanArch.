@@ -4,11 +4,11 @@ public interface IRoleService
 {
     Task<bool> CreateRoleAsync(string name);
 
-    Task<bool> DeleteRoleAsync(string name);
+    Task<bool> DeleteRoleAsync(string id);
 
     Task<bool> UpdateRoleAsync(string id, string name);
 
-    Task<Dictionary<string, string>> GetAllRolesAsync();
+    (object,int) GetAllRolesAsync(int page,int size);
 
     Task<(string id, string name)> GetRoleByIdAsync(string id);
 }

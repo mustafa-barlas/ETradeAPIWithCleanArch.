@@ -21,8 +21,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ETradeAPI.Application.Repositories.BasketRepository;
 using ETradeAPI.Application.Repositories.CompletedOrderRepository;
+using ETradeAPI.Application.Repositories.EndpointRepository;
+using ETradeAPI.Application.Repositories.MenuRepository;
 using ETradeAPI.Persistence.Repositories.BasketRepository;
 using ETradeAPI.Persistence.Repositories.CompletedOrderRepository;
+using ETradeAPI.Persistence.Repositories.EndpointRepository;
+using ETradeAPI.Persistence.Repositories.MenuRepository;
 using Microsoft.AspNetCore.Identity;
 
 namespace ETradeAPI.Persistence;
@@ -60,6 +64,12 @@ public static class ServiceRegistration
         services.AddScoped<ICompletedOrderReadRepository, CompletedOrderReadRepository>();
         services.AddScoped<ICompletedOrderWriteRepository, CompletedOrderWriteRepository>();
 
+        services.AddScoped<IEndpointReadRepository, EndpointReadRepository>();
+        services.AddScoped<IEndpointWriteRepository, EndpointWriteRepository>();
+
+        services.AddScoped<IMenuReadRepository, MenuReadRepository>();
+        services.AddScoped<IMenuWriteRepository, MenuWriteRepository>();
+
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IExternalAuthentication, AuthService>();
@@ -67,6 +77,7 @@ public static class ServiceRegistration
         services.AddScoped<IBasketService, BasketService>();
         services.AddScoped<IOrderService, OrderService>();
         services.AddScoped<IRoleService, RoleService>();
+        services.AddScoped<IAuthorizationEndpointService, AuthorizationEndpointService>();
 
         services.AddIdentity<AppUser, AppRole>(options =>
         {

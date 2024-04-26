@@ -11,7 +11,6 @@ using ETradeAPI.Application.Features.Queries.Product.GetAllProduct;
 using ETradeAPI.Application.Features.Queries.Product.GetByIdProduct;
 using ETradeAPI.Application.Features.Queries.ProductImageFile.GetProductImages;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ETradeAPI.API.Controllers

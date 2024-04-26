@@ -1,14 +1,12 @@
 ﻿using ETradeAPI.Application.Abstractions.Services.Configurations;
 using ETradeAPI.Application.CustomAttributes;
 using ETradeAPI.Application.Enums;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ETradeAPI.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = "Admin")]
     public class ApplicationServicesController : ControllerBase
     {
         private readonly IApplicationService _applicationService;

@@ -23,10 +23,10 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommandReque
         {
             Address = request.Address,
             Description = request.Description,
-            BasketId = _basketService.GetUserActiveBasket?.Id.ToString(),
+            BasketId = _basketService.GetUserActiveBasket?.Id.ToString()
         });
 
-        await _orderHubService.OrderAddedMessageAsync("Yeni Bir Sipariş Oluşturuldu");
+        await _orderHubService.OrderAddedMessageAsync("yeni bir sipariş geldi! :) ");
 
         return new();
     }

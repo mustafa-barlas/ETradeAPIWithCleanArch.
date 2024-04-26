@@ -6,12 +6,14 @@ using ETradeAPI.Application.Features.Commands.Basket.RemoveBasketItem;
 using ETradeAPI.Application.Features.Commands.Basket.UpdateQuantity;
 using ETradeAPI.Application.Features.Queries.Basket.GetBasketItems;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ETradeAPI.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Admin")]
     public class BasketsController : ControllerBase
     {
         readonly IMediator _mediator;

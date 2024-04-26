@@ -3,5 +3,5 @@
 public class GetAllOrdersQueryResponse
 {
     public int TotalOrderCount { get; set; }
-    public Object Order { get; set; }
+    public object Orders { get; set; }
 }

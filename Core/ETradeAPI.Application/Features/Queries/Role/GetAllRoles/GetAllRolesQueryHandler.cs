@@ -14,11 +14,11 @@ public class GetAllRolesQueryHandler : IRequestHandler<GetAllRolesQueryRequest, 
 
     public async Task<GetAllRolesQueryResponse> Handle(GetAllRolesQueryRequest request, CancellationToken cancellationToken)
     {
-        var result = await _roleService.GetAllRolesAsync();
-
+        var (datas, count) = _roleService.GetAllRolesAsync(request.Page, request.Size);
         return new()
         {
-            Datas = result
+            Datas = datas,
+            TotalCount = count
         };
     }
 }

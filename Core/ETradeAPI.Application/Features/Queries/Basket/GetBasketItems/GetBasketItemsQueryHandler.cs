@@ -15,14 +15,12 @@ public class GetBasketItemsQueryHandler : IRequestHandler<GetBasketItemsQueryReq
     public async Task<List<GetBasketItemsQueryResponse>> Handle(GetBasketItemsQueryRequest request, CancellationToken cancellationToken)
     {
         var basketItems = await _basketService.GetBasketItemsAsync();
-
-        return basketItems.Select(x => new GetBasketItemsQueryResponse
+        return basketItems.Select(ba => new GetBasketItemsQueryResponse
         {
-            BasketItemId = x.BasketId.ToString(),
-            Name = x.Product.Name,
-            Price = x.Product.Price,
-            Quantity = x.Quantity
-
+            BasketItemId = ba.Id.ToString(),
+            Name = ba.Product.Name,
+            Price = ba.Product.Price,
+            Quantity = ba.Quantity
         }).ToList();
     }
 }

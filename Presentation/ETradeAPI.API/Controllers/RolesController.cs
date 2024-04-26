@@ -6,14 +6,12 @@ using ETradeAPI.Application.Features.Commands.Role.UpdateRole;
 using ETradeAPI.Application.Features.Queries.Role.GetAllRoles;
 using ETradeAPI.Application.Features.Queries.Role.GetRoleById;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ETradeAPI.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = "Admin")]
     public class RolesController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -56,7 +54,7 @@ namespace ETradeAPI.API.Controllers
             return Ok(response);
         }
 
-        [HttpDelete("{name}")]
+        [HttpDelete("{Id}")]
         [AuthorizeDefinition(ActionType = ActionType.Deleting, Definition = "Delete Role", Menu = "Roles")]
         public async Task<IActionResult> DeleteRole([FromRoute] DeleteRoleCommandRequest request)
         {

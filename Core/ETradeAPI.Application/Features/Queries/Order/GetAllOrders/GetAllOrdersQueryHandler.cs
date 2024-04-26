@@ -19,7 +19,7 @@ public class GetAllOrdersQueryHandler : IRequestHandler<GetAllOrdersQueryRequest
         return new()
         {
             TotalOrderCount = data.TotalOrderCount,
-            Order = data.Order
+            Orders = data.Order
         };
     }
 }

@@ -21,7 +21,6 @@ public class MailService : IMailService
 
     public async Task SendMailAsync(string[] tos, string subject, string body, bool isBodyHtml = true)
     {
-
         MailMessage mail = new();
         mail.IsBodyHtml = isBodyHtml;
         foreach (var to in tos)
@@ -31,7 +30,6 @@ public class MailService : IMailService
         mail.From = new(_configuration["Mail:Username"], "Barlas E-Ticaret", System.Text.Encoding.UTF8);
 
         SmtpClient smtp = new();
-        smtp.UseDefaultCredentials = false;
         smtp.Credentials = new NetworkCredential(_configuration["Mail:Username"], _configuration["Mail:Password"]);
         smtp.Port = 587;
         smtp.EnableSsl = true;
@@ -48,17 +46,18 @@ public class MailService : IMailService
         mail.AppendLine(userId);
         mail.AppendLine("/");
         mail.AppendLine(resetToken);
-        mail.AppendLine("\">Yeni şifre talebi için tıklayınız...</a></strong><br><br><span style=\"font-size:12px;\">NOT : Eğer ki bu talep tarafınızca gerçekleştirilmemişse lütfen bu maili ciddiye almayınız.</span><br>Saygılarımızla...<br><br><br> Barlas|E-Ticaret");
+        mail.AppendLine("\">Yeni şifre talebi için tıklayınız...</a></strong><br><br><span style=\"font-size:12px;\">NOT : Eğer ki bu talep tarafınızca gerçekleştirilmemişse lütfen bu maili ciddiye almayınız.</span><br><br>Barlas E-Ticaret");
 
         await SendMailAsync(to, "Şifre Yenileme Talebi", mail.ToString());
     }
 
-    public async Task SendCompletedOrderMailAsync(string to, string Name, string userSurname, string orderCode, DateTime orderDate)
+    public async Task SendCompletedOrderMailAsync(string to, string orderCode, DateTime orderDate, string userName)
     {
+        string mail = $"Sayın {userName} Merhaba<br>" +
+            $"{orderDate} tarihinde vermiş olduğunuz {orderCode} kodlu siparişiniz tamamlanmış ve kargo firmasına verilmiştir.<br>";
 
-        string mail = $"Sayın {Name} {userSurname}Merhaba<br> " +
-                      $"{orderDate} tarihinde vermiş oldugunuz {orderCode} kodlu siparişiniz alınmıştır.";
+        await SendMailAsync(to, $"{orderCode} Sipariş Numaralı Siparişiniz Tamamlandı", mail);
 
-        await SendMailAsync(to, $"{orderCode} Siparişiniz alındı", mail);
     }
+
 }

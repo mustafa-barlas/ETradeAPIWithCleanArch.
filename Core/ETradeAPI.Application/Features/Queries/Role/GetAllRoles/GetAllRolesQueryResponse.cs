@@ -2,5 +2,6 @@
 
 public class GetAllRolesQueryResponse
 {
-    public IDictionary<string, string> Datas { get; set; }
+    public object Datas { get; set; }
+    public int TotalCount { get; set; }
 }

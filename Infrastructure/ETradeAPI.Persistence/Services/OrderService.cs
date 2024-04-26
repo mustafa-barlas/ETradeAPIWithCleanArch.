@@ -131,10 +131,9 @@ public class OrderService : IOrderService
             return (await _completedOrderWriteRepository.SaveAsync() > 0, new()
             {
                 OrderCode = order.OrderCode,
-                Name = order.Basket.User.UserName,
-                UserSurname = order.Basket.User.NameSurname,
+                EMail = order.Basket.User.Email,
+                Username = order.Basket.User.NameSurname,
                 OrderDate = order.CreatedDate,
-                Email = order.Basket.User.Email
             });
         }
 

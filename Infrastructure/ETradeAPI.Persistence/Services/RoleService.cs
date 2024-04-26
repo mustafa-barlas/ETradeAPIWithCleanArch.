@@ -1,7 +1,6 @@
 ﻿using ETradeAPI.Application.Abstractions.Services;
 using ETradeAPI.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace ETradeAPI.Persistence.Services;
 
@@ -16,27 +15,37 @@ public class RoleService : IRoleService
 
     public async Task<bool> CreateRoleAsync(string name)
     {
-
-
-        IdentityResult result = await _roleManager.CreateAsync(new() { Name = name });
+        IdentityResult result = await _roleManager.CreateAsync(new() { Id = Guid.NewGuid().ToString(), Name = name });
         return result.Succeeded;
     }
 
-    public async Task<bool> DeleteRoleAsync(string name)
+    public async Task<bool> DeleteRoleAsync(string id)
     {
-        IdentityResult result = await _roleManager.DeleteAsync(new() { Name = name });
+        AppRole role = await _roleManager.FindByIdAsync(id);
+        IdentityResult result = await _roleManager.DeleteAsync(role);
         return result.Succeeded;
     }
 
     public async Task<bool> UpdateRoleAsync(string id, string name)
     {
-        IdentityResult result = await _roleManager.UpdateAsync(new() { Id = id, Name = name });
+        AppRole role = await _roleManager.FindByIdAsync(id);
+        role.Name = name;
+        IdentityResult result = await _roleManager.UpdateAsync(role);
         return result.Succeeded;
     }
 
-    public async Task<Dictionary<string, string>> GetAllRolesAsync()
+    public (object, int) GetAllRolesAsync(int page, int size)
     {
-        return await _roleManager.Roles.ToDictionaryAsync(role => role.Id, role => role.Name);
+        var query = _roleManager.Roles;
+
+        IQueryable<AppRole> rolesQuery = null;
+
+        if (page != -1 && size != -1)
+            rolesQuery = query.Skip(page * size).Take(size);
+        else
+            rolesQuery = query;
+
+        return (query.Select(x => new { x.Id, x.Name }), query.Count());
     }
 
     public async Task<(string id, string name)> GetRoleByIdAsync(string id)

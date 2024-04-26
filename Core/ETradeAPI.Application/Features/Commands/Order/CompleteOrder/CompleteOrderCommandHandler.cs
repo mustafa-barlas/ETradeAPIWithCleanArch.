@@ -18,10 +18,8 @@ public class CompleteOrderCommandHandler : IRequestHandler<CompleteOrderCommandR
     public async Task<CompleteOrderCommandResponse> Handle(CompleteOrderCommandRequest request, CancellationToken cancellationToken)
     {
         (bool succeeded, CompletedOrderDto dto) = await _orderService.CompleteOrderAsync(request.Id);
-
         if (succeeded)
-            await _mailService.SendCompletedOrderMailAsync(dto.Email, dto.Name, dto.UserSurname, dto.OrderCode, dto.OrderDate);
-
+            await _mailService.SendCompletedOrderMailAsync(dto.EMail, dto.OrderCode, dto.OrderDate, dto.Username);
         return new();
     }
 }
