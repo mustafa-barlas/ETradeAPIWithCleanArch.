@@ -19,5 +19,5 @@ public interface IUserService
 
     Task<string[]> GetRolesToUserAsync(string userIdOrName);
 
-    //Task<bool> HasRolePermissionToEndpointAsync(string name, string code);
+    Task<bool> HasRolePermissionToEndpointAsync(string name, string code);
 }

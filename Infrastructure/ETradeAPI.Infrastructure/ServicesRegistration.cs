@@ -23,6 +23,7 @@ namespace ETradeAPI.Infrastructure
             serviceCollection.AddScoped<IFileService, FileService>();
             serviceCollection.AddScoped<IMailService, MailService>();
             serviceCollection.AddScoped<IApplicationService, ApplicationService>();
+            serviceCollection.AddScoped<IQRCodeService, QRCodeService>();
 
         }
         public static void AddStorage<T>(this IServiceCollection serviceCollection) where T : Storage, IStorage

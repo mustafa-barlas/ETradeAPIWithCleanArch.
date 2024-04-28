@@ -6,7 +6,6 @@ using ETradeAPI.Application.Features.Commands.AppUser.UpdatePassword;
 using ETradeAPI.Application.Features.Queries.AppUser.GetAllUser;
 using ETradeAPI.Application.Features.Queries.AppUser.GetRolesToUser;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ETradeAPI.API.Controllers

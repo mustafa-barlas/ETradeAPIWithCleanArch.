@@ -30,7 +30,7 @@ public class AuthorizationEndpointService : IAuthorizationEndpointService
 
     public async Task AssignRoleEndpointAsync(string[] roles, string menu, string code, Type type)
     {
-        Menu _menu = await _menuReadRepository.GetSingleAsync(m => m.Name == menu);
+        Menu? _menu = await _menuReadRepository.GetSingleAsync(m => m.Name == menu);
         if (_menu == null)
         {
             _menu = new()
@@ -65,25 +65,25 @@ public class AuthorizationEndpointService : IAuthorizationEndpointService
             await _endpointWriteRepository.SaveAsync();
         }
 
-        foreach (var role in endpoint.Roles)
-            endpoint.Roles.Remove(role);
+        foreach (var role in endpoint.Roles) endpoint.Roles.Remove(role);
+
 
         var appRoles = await _roleManager.Roles.Where(r => roles.Contains(r.Name)).ToListAsync();
 
-        foreach (var role in appRoles)
-            endpoint.Roles.Add(role);
+        foreach (var role in appRoles) endpoint.Roles.Add(role);
+
 
         await _endpointWriteRepository.SaveAsync();
     }
 
     public async Task<List<string>> GetRolesToEndpointAsync(string code, string menu)
     {
-        Endpoint endpoint = await _endpointReadRepository.Table
+        Endpoint? endpoint = await _endpointReadRepository.Table
             .Include(e => e.Roles)
             .Include(e => e.Menu)
             .FirstOrDefaultAsync(e => e.Code == code && e.Menu.Name == menu);
-        if (endpoint != null)
-            return endpoint.Roles.Select(r => r.Name).ToList();
+        if (endpoint != null) return endpoint.Roles.Select(r => r.Name).ToList();
+
         return null;
     }
 }

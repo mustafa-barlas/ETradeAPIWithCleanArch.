@@ -1,4 +1,5 @@
-﻿using ETradeAPI.Application.Constants;
+﻿using ETradeAPI.Application.Abstractions.Services;
+using ETradeAPI.Application.Constants;
 using ETradeAPI.Application.CustomAttributes;
 using ETradeAPI.Application.Enums;
 using ETradeAPI.Application.Features.Commands.Product.CreateProduct;
@@ -21,10 +22,12 @@ namespace ETradeAPI.API.Controllers
     {
 
         private readonly IMediator _mediator;
+        private readonly IProductService _productService;
 
-        public ProductsController(IMediator mediator)
+        public ProductsController(IMediator mediator, IProductService productService)
         {
             _mediator = mediator;
+            _productService = productService;
         }
 
 
@@ -108,6 +111,12 @@ namespace ETradeAPI.API.Controllers
             return Ok(response);
         }
 
-
+        [HttpGet("qrcode/{productId}")]
+        //[AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Products, ActionType = ActionType.Reading, Definition = "QRCode To Product")]
+        public async Task<IActionResult> GetQrCodeToProduct([FromRoute] string productId)
+        {
+            var data = await _productService.QrCodeToProductAsync(productId);
+            return File(data, "image/png");
+        }
     }
 }

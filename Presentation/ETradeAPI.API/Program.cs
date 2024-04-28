@@ -18,6 +18,7 @@ using Serilog.Core;
 using Serilog.Sinks.PostgreSQL;
 using System.Security.Claims;
 using System.Text;
+using ETradeAPI.API.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +26,7 @@ builder.Services.AddHttpContextAccessor();//Client'tan gelen request neticvesind
 builder.Services.AddPersistenceServices();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddApplicationServices();
-builder.Services.AddSignalRServices();
+builder.Services.AddSignalRServices(); 
 
 //builder.Services.AddStorage<LocalStorage>();
 builder.Services.AddStorage<AzureStorage>();
@@ -69,6 +70,7 @@ builder.Services.AddHttpLogging(logging =>
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<ValidationFilter>();
+    options.Filters.Add<RolePermissionFilter>();
 
 })
     .AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<CreateProductValidator>())
