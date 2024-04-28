@@ -40,6 +40,11 @@ public class ProductService : IProductService
 
     public async Task StockUpdateToProductAsync(string productId, int stock)
     {
-        throw new NotImplementedException();
+        Product product = await _productReadRepository.GetByIdAsync(productId);
+        if (product == null) throw new Exception("Product Not Found");
+
+
+        product.Stock = stock;
+        await _productWriteRepository.SaveAsync();
     }
 }
